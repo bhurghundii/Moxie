@@ -1,0 +1,28 @@
+{
+  "name": "moxie",
+  "version": "1.0.0",
+  "description": "A social network for real people",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager .",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=../release-builds",
+    "package-win": "electron-packager . Moxie-App  --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=../release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"MOXIE\"",
+    "package-linux": "electron-packager . Moxie-App --overwrite --asar=true --platform=linux --arch=x64  --prune=true --out=../release-builds"
+  },
+  "keywords": [
+    "social",
+    "network",
+    "real"
+  ],
+  "author": "BLACK MAGIC PROJECT",
+  "license": "SEE LICENSE IN README.MD",
+  "dependencies": {
+    "electron": "^4.1.4",
+    "node-watch": "^0.6.0",
+    "python-shell": "^1.0.7"
+  },
+  "devDependencies": {
+    "electron-packager": "^13.1.1"
+  }
+}

@@ -1,0 +1,16 @@
+Sat Apr 20 2019 12:37:57 GMT+0100 (British Summer Time) Starting TORCHAT 
+Sat Apr 20 2019 12:37:57 GMT+0100 (British Summer Time) TORCHAT successfully started 
+Sat Apr 20 2019 12:37:58 GMT+0100 (British Summer Time) Starting Scanning if Bluetooth is on 
+Sat Apr 20 2019 12:37:59 GMT+0100 (British Summer Time) Checking if me.info exists so we can go to the right place 
+Sat Apr 20 2019 12:37:59 GMT+0100 (British Summer Time) Moxie loaded for first time so we introduce 
+Sat Apr 20 2019 12:38:06 GMT+0100 (British Summer Time) Starting to init Moxie with your name 
+Sat Apr 20 2019 12:38:06 GMT+0100 (British Summer Time) BUILD: 0
+Sat Apr 20 2019 12:38:06 GMT+0100 (British Summer Time) Done init Moxie with your name 
+Sat Apr 20 2019 12:50:31 GMT+0100 (British Summer Time) Starting TORCHAT 
+Sat Apr 20 2019 12:50:31 GMT+0100 (British Summer Time) TORCHAT successfully started 
+Sat Apr 20 2019 12:50:32 GMT+0100 (British Summer Time) Starting Scanning if Bluetooth is on 
+Sat Apr 20 2019 12:50:33 GMT+0100 (British Summer Time) Checking if me.info exists so we can go to the right place 
+Sat Apr 20 2019 21:53:14 GMT+0100 (British Summer Time) Moxie loaded for first time so we introduce 
+Sat Apr 20 2019 21:53:26 GMT+0100 (British Summer Time) Starting to init Moxie with your name 
+Sat Apr 20 2019 21:53:26 GMT+0100 (British Summer Time) BUILD: 0
+Sat Apr 20 2019 21:53:26 GMT+0100 (British Summer Time) Done init Moxie with your name 

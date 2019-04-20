@@ -1,0 +1,43 @@
+<style>
+body{
+  background-color: #ffffff;
+}
+.icon{
+  position: fixed;
+  top: 40%;
+  left: 40%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-top: 60px solid black;
+  position: fixed;
+  display: none;
+}
+
+.arrow-right {
+  width: 0;
+  height: 0;
+  border-top: 60px solid transparent;
+  border-bottom: 60px solid transparent;
+  border-left: 60px solid black;
+  position: fixed;
+  display: none;
+}
+
+.arrow-left {
+  width: 0;
+  height: 0;
+  border-top: 60px solid transparent;
+  border-bottom: 60px solid transparent;
+  border-right:60px solid black;
+  position: fixed;
+  left: 3.75em;
+  display: none;
+}
+</style>

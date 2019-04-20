@@ -1,0 +1,219 @@
+<style>.friendbar {
+  background-color: black;
+}
+
+.sendButton {
+  position: fixed;
+  right: 0px;
+  bottom: 0px;
+  float: right;
+  background-color: #000000;
+  border: 1px solid #000000;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 17px;
+  padding: 16px 31px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #000000;
+  height: 50px;
+}
+
+.sendButton:hover {
+  background-color: #000000;
+}
+
+.sendButton:active {}
+
+.bumpButton {
+  position: fixed;
+  left: 96%
+}
+
+#buttonBump {
+  max-width: 65%;
+  height: auto;
+}
+
+#ContentID {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+}
+
+#buttonChat {
+  max-width: 100%;
+  height: 4%;
+}
+
+.chat {
+  position: fixed;
+  left: 1%
+}
+
+.img-circle {
+  position: relative;
+  border-radius: 50%;
+  width: 20%;
+}
+
+.bumpAnimation {
+  height: 60%;
+  width: 60%;
+  position: relative;
+  left: 0%;
+  bottom: 10%;
+}
+
+.TextLog {
+  font-family: Arial;
+  position: absolute;
+  left: 24%;
+  bottom: 40%;
+  font-size: 45px;
+  text-align: center;
+  line-height: 22px;
+}
+
+.StatusLog {
+  position: absolute;
+  left: 20%;
+  top: 0%;
+  backgroundColor: #77dd77;
+  width: 60%;
+  height: 5%;
+  color: #000000;
+  text-align: center;
+}
+
+input.textarea {
+  position: fixed;
+  bottom: 50%;
+  left: 5%;
+  right: 0px;
+  width: 90%;
+  height: 100px;
+  z-index: 1;
+  background: #fafafa;
+  border: 3px solid black;
+  outline: none;
+  padding-left: 55px;
+  padding-right: 55px;
+  color: #666;
+  font-weight: 400;
+  font-size: 30px;
+}
+
+.round-button-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 10px solid #4679BD;
+  overflow: hidden;
+  background: #4679BD;
+  position: absolute;
+  left: 45%;
+  bottom: 0px;
+  z-index: 50;
+}
+
+.round-button-circle:hover {
+  background: #30588e;
+}
+
+.tool-button-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 10px solid #CDCDCD;
+  overflow: hidden;
+  background: #CDCDCD;
+  box-shadow: 0 0 3px #CDCDCD;
+  position: absolute;
+  left: 37%;
+  bottom: -10%;
+  z-index: 25;
+}
+
+.toolicon-button-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 10px solid white;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 0 3px white;
+  position: absolute;
+  left: 38%;
+  bottom: 0%;
+  z-index: 26;
+}
+
+.toolicon1-button-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 10px solid white;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 0 3px white;
+  position: absolute;
+  left: 40%;
+  bottom: 10%;
+  z-index: 26;
+}
+
+.toolicon2-button-circle {
+  width: 50px;
+  height: 50px;
+  z-index: 26;
+  border-radius: 50%;
+  border: 10px solid white;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 0 3px white;
+  position: absolute;
+  right: 40%;
+  bottom: 10%;
+}
+
+.toolicon3-button-circle {
+  width: 50px;
+  height: 50px;
+  z-index: 26;
+  border-radius: 50%;
+  border: 10px solid white;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 0 3px white;
+  position: absolute;
+  right: 38%;
+  bottom: 0%;
+}
+
+html {
+  overflow: hidden;
+}
+
+.Toolkit {
+  display: none;
+}
+
+.status {
+  display: none;
+}
+
+.postStatusButton {
+  width: 100px;
+  height: 100px;
+  border: 10px solid black;
+  overflow: hidden;
+  background: black;
+  box-shadow: 0 0 3px black;
+  position: absolute;
+  right: 10%;
+  bottom: 40%;
+}
+
+</style>

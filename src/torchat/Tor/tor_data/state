@@ -1,0 +1,136 @@
+# Tor state file last generated on 2019-04-20 21:55:46 local time
+# Other times below are in UTC
+# You *do not* need to edit this file.
+
+EntryGuard mentor CBF2B7BBE2092C5B63DCF1A86FF4507C35612716 DirCache
+EntryGuardAddedBy CBF2B7BBE2092C5B63DCF1A86FF4507C35612716 0.2.9.14 2019-02-08 09:59:03
+EntryGuardPathBias 193.375000 188.750000 182.625000 6.125000 0.000000 8.375000
+EntryGuardPathUseBias 61.156250 61.156250
+EntryGuard Onyx 6DFEB41C04CCE846871338E85DD5ACF5CFB6C1DD DirCache
+EntryGuardAddedBy 6DFEB41C04CCE846871338E85DD5ACF5CFB6C1DD 0.2.9.14 2019-01-25 11:00:56
+EntryGuardPathBias 201.750000 196.125000 194.375000 1.750000 0.000000 7.375000
+EntryGuardPathUseBias 77.296875 77.296875
+EntryGuard as44194a36s01 E0EAA536856FBD3C3AB46C2BAA398E7CDFDAFF5D DirCache
+EntryGuardAddedBy E0EAA536856FBD3C3AB46C2BAA398E7CDFDAFF5D 0.2.9.14 2019-01-22 13:33:57
+EntryGuardPathBias 291.000000 280.000000 268.750000 10.250000 1.000000 10.250000
+EntryGuardPathUseBias 72.546875 72.046875
+EntryGuard nodvrelay02 BC798053A6C0743B32E7C91DB5732DF47C97C34D DirCache
+EntryGuardAddedBy BC798053A6C0743B32E7C91DB5732DF47C97C34D 0.2.9.14 2019-02-01 09:38:01
+EntryGuardPathBias 290.500000 282.375000 281.250000 1.125000 0.000000 10.500000
+EntryGuardPathUseBias 98.523438 98.523438
+EntryGuard Biverse B70629C29A032979E5AD00CC51D2330845AAFD6A DirCache
+EntryGuardAddedBy B70629C29A032979E5AD00CC51D2330845AAFD6A 0.2.9.14 2019-01-30 17:24:07
+EntryGuardPathBias 287.500000 283.250000 281.500000 1.750000 0.000000 10.000000
+EntryGuardPathUseBias 60.578125 60.578125
+EntryGuard TOR2DFN01a 3239007CE1FB2ECDFDF2067DF23B949295DC5EF6 DirCache
+EntryGuardAddedBy 3239007CE1FB2ECDFDF2067DF23B949295DC5EF6 0.2.9.14 2019-02-13 14:13:41
+EntryGuardPathBias 292.500000 289.000000 281.500000 7.500000 0.000000 9.000000
+EntryGuardPathUseBias 78.640625 78.640625
+EntryGuard fury 8D6BC7FFF76D44CA67F6709E2EFACF6742E5920E DirCache
+EntryGuardUnlistedSince 2019-04-08 18:09:40
+EntryGuardAddedBy 8D6BC7FFF76D44CA67F6709E2EFACF6742E5920E 0.2.9.14 2019-02-05 07:49:29
+EntryGuardPathBias 224.000000 216.000000 214.000000 2.000000 0.000000 7.000000
+EntryGuardPathUseBias 65.000000 65.000000
+EntryGuard tebe 78B6F9E5338AACC63E04863D642324E02134E05F DirCache
+EntryGuardAddedBy 78B6F9E5338AACC63E04863D642324E02134E05F 0.2.9.14 2019-03-07 06:55:33
+EntryGuardPathBias 145.000000 143.000000 135.000000 8.000000 0.000000 2.000000
+EntryGuardPathUseBias 90.000000 90.000000
+EntryGuard bartleby A1B829A4022F145E5458E06270CEC12B3E203026 DirCache
+EntryGuardDownSince 2019-04-20 12:27:02 2019-04-20 12:27:02
+EntryGuardAddedBy A1B829A4022F145E5458E06270CEC12B3E203026 0.2.9.14 2019-04-06 22:05:32
+EntryGuardPathBias 16.000000 15.000000 9.000000 6.000000 0.000000 8.000000
+EntryGuardPathUseBias 4.000000 4.000000
+EntryGuard dragonhoard1 24A17A4C1FA8C2108ACDE3BE681B0731384BF3A5 DirCache
+EntryGuardAddedBy 24A17A4C1FA8C2108ACDE3BE681B0731384BF3A5 0.2.9.14 2019-03-24 04:14:54
+EntryGuardPathBias 5.000000 5.000000 5.000000 0.000000 0.000000 0.000000
+EntryGuardPathUseBias 3.000000 3.000000
+EntryGuard broccoli B1045E12FA4EA0D457A74013866CB41DC0D290BF DirCache
+EntryGuardDownSince 2019-04-11 19:23:57 2019-04-11 19:23:57
+EntryGuardAddedBy B1045E12FA4EA0D457A74013866CB41DC0D290BF 0.2.9.14 2019-04-10 16:38:32
+TorVersion Tor 0.2.9.14
+LastWritten 2019-04-20 20:55:46
+TotalBuildTimes 82
+CircuitBuildTimeBin 275 1
+CircuitBuildTimeBin 725 1
+CircuitBuildTimeBin 1325 1
+CircuitBuildTimeBin 1525 1
+CircuitBuildTimeBin 1725 1
+CircuitBuildTimeBin 1775 1
+CircuitBuildTimeBin 1875 1
+CircuitBuildTimeBin 1925 1
+CircuitBuildTimeBin 2075 1
+CircuitBuildTimeBin 2275 1
+CircuitBuildTimeBin 2325 1
+CircuitBuildTimeBin 2475 1
+CircuitBuildTimeBin 2525 1
+CircuitBuildTimeBin 2625 1
+CircuitBuildTimeBin 2775 1
+CircuitBuildTimeBin 3025 1
+CircuitBuildTimeBin 3125 2
+CircuitBuildTimeBin 3225 1
+CircuitBuildTimeBin 3275 2
+CircuitBuildTimeBin 3475 1
+CircuitBuildTimeBin 3625 1
+CircuitBuildTimeBin 3675 2
+CircuitBuildTimeBin 3775 3
+CircuitBuildTimeBin 3825 2
+CircuitBuildTimeBin 3975 2
+CircuitBuildTimeBin 4075 1
+CircuitBuildTimeBin 4225 2
+CircuitBuildTimeBin 4275 1
+CircuitBuildTimeBin 4325 1
+CircuitBuildTimeBin 4375 1
+CircuitBuildTimeBin 4425 2
+CircuitBuildTimeBin 4475 1
+CircuitBuildTimeBin 4525 1
+CircuitBuildTimeBin 4575 1
+CircuitBuildTimeBin 4725 1
+CircuitBuildTimeBin 4875 1
+CircuitBuildTimeBin 5075 1
+CircuitBuildTimeBin 5125 2
+CircuitBuildTimeBin 5225 2
+CircuitBuildTimeBin 5425 3
+CircuitBuildTimeBin 5525 1
+CircuitBuildTimeBin 5575 1
+CircuitBuildTimeBin 5725 2
+CircuitBuildTimeBin 5875 1
+CircuitBuildTimeBin 6075 1
+CircuitBuildTimeBin 6425 2
+CircuitBuildTimeBin 6725 2
+CircuitBuildTimeBin 6825 1
+CircuitBuildTimeBin 7175 1
+CircuitBuildTimeBin 7425 1
+CircuitBuildTimeBin 8075 1
+CircuitBuildTimeBin 8325 2
+CircuitBuildTimeBin 8775 1
+CircuitBuildTimeBin 8875 1
+CircuitBuildTimeBin 9175 1
+CircuitBuildTimeBin 9775 1
+CircuitBuildTimeBin 10425 2
+CircuitBuildTimeBin 11275 1
+CircuitBuildTimeBin 12275 1
+CircuitBuildTimeBin 18075 1
+CircuitBuildTimeBin 22575 1
+CircuitBuildTimeBin 22625 1
+CircuitBuildTimeBin 22925 1
+CircuitBuildTimeBin 24075 1
+Guard in=default rsa_id=6E33D4101DDC6366BE477125068E3D5D2F22C747 nickname=Unnamed sampled_on=2018-12-30T12:18:26 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=5BA19B5D5AB0CB9EF8EA33DA77585B75449400B0 nickname=gurke sampled_on=2018-12-24T11:03:09 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=3D761ED5FD5A1994317BF349A21CA84DC3B6B3FC nickname=ElTorCidito sampled_on=2018-12-30T20:12:35 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=5DB9AE27A44EB7B476CC04A66C67A71C97A001E6 nickname=Chenjesu sampled_on=2018-12-26T06:13:36 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=3A901D1D97500D021E9BDD2A06BE5A846051CD0F nickname=TykRelay07 sampled_on=2018-12-21T18:46:54 sampled_by=0.3.2.10 listed=1 confirmed_on=2018-12-29T15:49:47 confirmed_idx=5 pb_use_attempts=33.000000 pb_use_successes=33.000000 pb_circ_attempts=65.000000 pb_circ_successes=63.000000 pb_successful_circuits_closed=63.000000 pb_timeouts=1.000000
+Guard in=default rsa_id=FD79B7F9230858B48E75F389661840C702511078 nickname=dezember sampled_on=2018-12-19T20:35:55 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=456C1E39B5780CD05267F8EFEF123A2FA8DB7715 nickname=Fithnovember sampled_on=2018-12-25T12:46:11 sampled_by=0.3.2.10 listed=1 confirmed_on=2018-12-22T03:23:22 confirmed_idx=3 pb_use_attempts=28.000000 pb_use_successes=28.000000 pb_circ_attempts=52.000000 pb_circ_successes=52.000000 pb_successful_circuits_closed=52.000000
+Guard in=default rsa_id=CFEC7575C7C7EDED28FC612EED037AB6DD1ABFCD nickname=MyAwesomeRelay sampled_on=2018-12-27T00:30:53 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=B95F4DFEA04004E493CD30FEB051B2ED3B8DD34B nickname=powerrelay sampled_on=2018-12-28T02:05:53 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=5BAEAA88480E38F70CF87D3900D9412338116114 nickname=DipulseIT1 sampled_on=2018-12-19T23:04:49 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=F5FBBE191A8B46E6F5C0909214F46DB8D74C9F97 nickname=TRelay sampled_on=2018-12-22T08:00:26 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=46F7E6C305E968D455214A154A67920C4E27D873 nickname=martinsrelay sampled_on=2018-12-20T01:12:29 sampled_by=0.3.2.10 listed=1 confirmed_on=2018-12-27T17:21:29 confirmed_idx=1 pb_use_attempts=19.000000 pb_use_successes=19.000000 pb_circ_attempts=44.000000 pb_circ_successes=43.000000 pb_successful_circuits_closed=43.000000 pb_timeouts=1.000000
+Guard in=default rsa_id=7B0D192B3B31940A6FBCC24F67C3F897CDE639C0 nickname=madtrixz01 sampled_on=2018-12-19T10:47:10 sampled_by=0.3.2.10 listed=1 confirmed_on=2018-12-29T22:13:37 confirmed_idx=0 pb_use_attempts=19.000000 pb_use_successes=19.000000 pb_circ_attempts=54.000000 pb_circ_successes=50.000000 pb_successful_circuits_closed=50.000000 pb_timeouts=3.000000
+Guard in=default rsa_id=1C0736CF3744A3B87C2D2269B8BD3388C7E60552 nickname=FreedomFries2 sampled_on=2018-12-26T14:47:17 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=80392DC1522E647C56457CEBA58DD84CC56AEC44 nickname=Alienzone sampled_on=2018-12-27T19:55:45 sampled_by=0.3.2.10 listed=1 confirmed_on=2018-12-25T12:58:47 confirmed_idx=2 pb_use_attempts=26.000000 pb_use_successes=26.000000 pb_circ_attempts=47.000000 pb_circ_successes=47.000000 pb_successful_circuits_closed=47.000000 pb_timeouts=2.000000
+Guard in=default rsa_id=B63809548016264685C2B4B420EE138287806815 nickname=ZloISvoboda sampled_on=2018-12-25T15:42:08 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=A4E120350425BAD920307FFA74440F95D0172302 nickname=antongervase sampled_on=2018-12-26T18:32:56 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=D5F3FB17504744FB7ECEF46F4B1D155258A6D942 nickname=janschejbalScaleWy5 sampled_on=2018-12-22T06:55:13 sampled_by=0.3.2.10 listed=1 confirmed_on=2018-12-25T11:55:22 confirmed_idx=4 pb_use_attempts=30.000000 pb_use_successes=30.000000 pb_circ_attempts=66.000000 pb_circ_successes=64.000000 pb_successful_circuits_closed=64.000000 pb_timeouts=2.000000
+Guard in=default rsa_id=E19D4503D2FD584C8099A954270A9BC819596E74 nickname=Unnamed sampled_on=2018-12-28T14:50:04 sampled_by=0.3.2.10 listed=1
+Guard in=default rsa_id=32EE911D968BE3E016ECA572BB1ED0A9EE43FC2F nickname=ndnr1 sampled_on=2018-12-19T12:13:34 sampled_by=0.3.2.10 listed=1 confirmed_on=2019-01-15T05:56:41 confirmed_idx=6 pb_use_attempts=3.000000 pb_use_successes=3.000000 pb_circ_attempts=4.000000 pb_circ_successes=4.000000 pb_successful_circuits_closed=4.000000
