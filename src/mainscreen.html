@@ -17,11 +17,7 @@
   <div class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-right" style="display:none; width:100%;  height: 100%; border-radius: 100%; left:50%; top:0%;" id="rightMenu">
     <button onclick="closeRightMenu()" class="w3-bar-item w3-button w3-large">Close &times;</button>
     <div>
-      <div class="TextLog">
-        <h2 class="Sus" id="BUMPStatus"> Ready! </h2>
-      </div>
-      <div class="bumpAnimation">
-      </div>
+    </div>
     </div>
   </div>
 
@@ -126,18 +122,6 @@
 
       }
     }
-
-
-    const watch = require('node-watch')
-    watch('status.txt', function(event, filename) {
-      const fs = require('fs');
-      var data = fs.readFileSync('status.txt', 'utf8')
-      data = data.split(' ')
-      document.getElementById("BUMPStatus").innerHTML = "";
-      for (var i = 0; i < data.length; i++) {
-        document.getElementById("BUMPStatus").innerHTML += data[i] + "<br></br>";
-      }
-    })
 
     checkTorChatStatus();
 
@@ -281,37 +265,7 @@
 
     }
 
-    function BFC() {
-
-      if (isReleaseBuild() == 0) {
-        const ps = require('python-shell');
-        console.log('Starting bump');
-        //   ps.PythonShell.run('bump.py', null, function (message) {
-        // console.log(message);
-        //   });
-      }
-
-      if (isReleaseBuild() == 1) {
-        var exec = require('child_process').execFile;
-        var startBump = function() {
-          exec('dist/bump/bump', function(err, data) {
-            console.log(err)
-          });
-        }
-        startBump();
-      }
-
-      if (isReleaseBuild() == 2) {
-        var exec = require('child_process').execFile;
-        var startBump = function() {
-          exec('dist/bump.exe', function(err, data) {
-            console.log(err)
-          });
-        }
-        startBump();
-      }
-
-    }
+    
   </script>
 </body>
 

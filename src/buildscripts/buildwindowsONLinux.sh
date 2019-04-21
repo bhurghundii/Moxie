@@ -13,19 +13,9 @@ if [ "$proceedVar" == 'y' ]; then
 
   echo "Building Python"
 
-  wine ~/.wine/drive_c/Python27/Scripts/pyinstaller.exe --onefile bump.py
-  cp config.txt dist/config.txt
-
   sed -i 's/0/2/g' MoxieFlags.config
   cp MoxieFlags.config ../release-builds/Moxie-App-win32-ia32/MoxieFlags.config
   sed -i 's/2/0/g' MoxieFlags.config
-
-
-  cp -R build ../release-builds/Moxie-App-win32-ia32/build
-  cp -R dist ../release-builds/Moxie-App-win32-ia32/dist
-
-  rm -rf build
-  rm -rf dist
 
   cd torchat
   wine ~/.wine/drive_c/Python27/Scripts/pyinstaller.exe --onefile torchat.py
