@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['torchat.py'],
-             pathex=['Z:\\home\\ubuntu\\MOXIE\\src\\torchat'],
+             pathex=['C:\\Users\\Vikram\\Documents\\GitHub\\Moxie\\src\\torchat'],
              binaries=[],
              datas=[],
              hiddenimports=[],

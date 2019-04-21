@@ -1,0 +1,2 @@
+install pybluez
+node install npm run windows

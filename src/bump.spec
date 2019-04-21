@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['bump.py'],
-             pathex=['Z:\\home\\ubuntu\\MOXIE\\src'],
+             pathex=['C:\\Users\\Vikram\\Documents\\GitHub\\Moxie\\src'],
              binaries=[],
              datas=[],
              hiddenimports=[],

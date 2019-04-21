@@ -1,5 +1,4 @@
 #!/bin/bash
-
 cd ..
 echo "You are creating a executable build for Windows WITH building Python files"
 echo "We will be wiping and resetting MOXIE "
@@ -14,7 +13,7 @@ if [ "$proceedVar" == 'y' ]; then
 
   echo "Building Python"
 
-  pyinstaller --onefile bump.py
+  wine ~/.wine/drive_c/Python27/Scripts/pyinstaller.exe --onefile bump.py
   cp config.txt dist/config.txt
 
   sed -i 's/0/2/g' MoxieFlags.config
@@ -29,7 +28,7 @@ if [ "$proceedVar" == 'y' ]; then
   rm -rf dist
 
   cd torchat
-  pyinstaller --onefile torchat.py
+  wine ~/.wine/drive_c/Python27/Scripts/pyinstaller.exe --onefile torchat.py
 
   cp portable.txt dist/portable.txt
   cp -R bin/Tor dist/Tor
