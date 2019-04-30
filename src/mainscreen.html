@@ -14,11 +14,11 @@
     <p> Not Ready </p>
   </div>
 
-  <div class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-right" style="display:none; width:100%;  height: 100%; border-radius: 100%; left:50%; top:0%;" id="rightMenu">
+  <div class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-right" style="display:none; width:100%;  height: 100%; left:70%; top:0%;" id="rightMenu">
     <button onclick="closeRightMenu()" class="w3-bar-item w3-button w3-large">Close &times;</button>
     <div>
     </div>
-    </div>
+  </div>
   </div>
 
   <div id="ContentID">
@@ -45,6 +45,7 @@
   <script>
     mainPageStart()
 
+    var watch = require('node-watch');
 
     function mainPageStart() {
       file = ""
@@ -70,7 +71,7 @@
         chat.innerHTML += '<div onclick="localStorage.friendChat = &quot;' + line + '&quot;;" > <a href="chat.html" class="w3-bar-item w3-button"> <img class="img-circle" src="http://www.imran.com/xyper_images/icon-user-default.png"> ' + line
           .split(" ")[1] + '</a> </div>'
       });
-      BFC();
+
     }
 
     function sendStatusUpdate() {
@@ -149,7 +150,7 @@
       watch('torchat/dist/torchatready.txt', function(event, filename) {
         checkTorChatStatus();
       })
-      
+
       watch('torchat/dist/statusUpdates.txt', function(event, filename) {
         document.getElementById("ContentID").innerHTML = "";
         StatusUpdate();
@@ -265,7 +266,74 @@
 
     }
 
-    
+    //testing clean up procedure
+    console.log(`This process is pid ${process.pid}`);
+    process.stdin.resume(); //so the program will not close instantly
+
+    function exitHandler(options, exitCode) {
+
+      const fs = require('fs');
+      var data = "Cleaning up Moxie"
+      fs.writeFile('statusMainScreen.txt', data,
+        function(err) {
+          if (options.cleanup) console.log('clean')
+          if (exitCode || exitCode === 0) console.log(exitCode)
+          if (options.exit) process.exit()
+        });
+
+
+    }
+    //this one is if they close the window normally
+    window.onbeforeunload = confirmExit;
+confirmExit() ;
+    function confirmExit() {
+
+      const fs = require('fs');
+      var pdids = fs.readFileSync('torchat/pid-torchat.txt', 'utf8')
+      var torchat_pid = pdids.split('|')[1]
+      var torsh_pid = pdids.split('|')[3]
+      console.log(torchat_pid + ' ' + tor_pid)
+
+      var util = require('util'),
+        exec = require('child_process').exec,
+        child;
+
+      child = exec('kill -9 ' + torchat_pid + '| kill -9' + (torsh_pid + 1) + '| kill -9' + (torsh_pid), // command line argument directly in string
+        function(error, stdout, stderr) { // one easy function to capture data/errors
+          console.log('stdout: ' + stdout);
+          console.log('stderr: ' + stderr);
+          if (error !== null) {
+            console.log('exec error: ' + error);
+          }
+        });
+
+    }
+
+    //do something when app is closing
+    process.on('SIGUSR2', exitHandler.bind(null, {
+      exit: true
+    }));
+    process.on('exit', exitHandler.bind(null, {
+      cleanup: true
+    }));
+
+    //catches ctrl+c event
+    process.on('SIGINT', exitHandler.bind(null, {
+      exit: true
+    }));
+
+    // catches "kill pid" (for example: nodemon restart)
+    process.on('SIGUSR1', exitHandler.bind(null, {
+      exit: true
+    }));
+    process.on('SIGUSR2', exitHandler.bind(null, {
+      exit: true
+    }));
+
+    //catches uncaught exceptions
+    process.on('uncaughtException', exitHandler.bind(null, {
+      exit: true
+    }));
   </script>
 </body>
 

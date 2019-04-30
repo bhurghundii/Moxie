@@ -19,7 +19,7 @@
   "license": "SEE LICENSE IN README.MD",
   "dependencies": {
     "electron": "^4.1.4",
-    "node-watch": "^0.6.0",
+    "node-watch": "^0.6.2",
     "python-shell": "^1.0.7"
   },
   "devDependencies": {

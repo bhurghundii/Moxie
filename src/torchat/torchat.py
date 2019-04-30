@@ -24,7 +24,11 @@ import tc_gui
 def main():
 
     file = open("torchatlog.txt", "w")
-    file.write("Torchat started")
+    file.write('Ready')
+    file.close()
+
+    file = open("pid-torchat.txt", "w")
+    file.write('python|' + str(os.getpid()) )
     file.close()
 
     #test for availability of our listening port
