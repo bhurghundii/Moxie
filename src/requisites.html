@@ -1,0 +1,60 @@
+<html>
+<link rel="stylesheet" href="css/welcome.css">
+<script src="js/utilities.js" type="text/javascript"> </script>
+
+<body>
+  <div class="welcometomox">
+    <script>
+      function writelog(text) {
+        var fs = require('fs');
+        fs.appendFile("moxielogout.txt", text, function(err) {
+          if (err) {
+            return console.log(err);
+          }
+        });
+      }
+
+      writelog(Date().toLocaleString() + ' Moxie loaded for first time so we introduce \n')
+    </script>
+    <h1> Installing the prerequisites </h1>
+    <p> We believe you should be in control of your data, what you say and no one else should tell you so </p>
+    <p> We will not connect your data at all while using the Moxie network and there is no sign up </p>
+
+    <a onclick="window.location.href = 'rights.html';" class="submitButton">More details</a>
+
+
+    <p> So! What do you want to be known as? </p>
+
+    <input class="tb5" id="submitButton" type="text" name="firstname" value="">
+    <br></br>
+    <a onclick="saveDetails();" class="submitButton">🡆</a>
+  </div>
+  <script>
+    function saveDetails() {
+      writelog(Date().toLocaleString() + ' Starting to init Moxie with your name \n')
+      var fs = require('fs');
+      writelog(Date().toLocaleString() + ' BUILD: ' + isReleaseBuild() + '\n')
+      if (isReleaseBuild() == 0) {
+        var readMyselfID = fs.readFileSync('torchat/' + 'buddy-list.txt', 'utf8')
+      }
+      if (isReleaseBuild() == 1) {
+        var readMyselfID = fs.readFileSync('torchat/dist/torchat/buddy-list.txt', 'utf8')
+      }
+
+      if (isReleaseBuild() == 2) {
+        var readMyselfID = fs.readFileSync('torchat/dist/' + 'buddy-list.txt', 'utf8')
+      }
+
+      var fs = require('fs');
+      fs.writeFile("me.info", document.getElementById("submitButton").value + " " + readMyselfID.split(" ")[0], function(err) {
+        if (err) {
+          return console.log(err);
+        }
+      });
+
+      writelog(Date().toLocaleString() + ' Done init Moxie with your name \n')
+      window.location.href = 'mainscreen.html';
+    }
+  </script>
+
+</html>

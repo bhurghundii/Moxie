@@ -1,0 +1,3 @@
+The requisities are the same but different platforms have different needs.
+The needs are:
+TOR
