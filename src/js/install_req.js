@@ -1,2 +1,4 @@
 var platform = process.platform;
-if platform == 'linux'
+if (platform == 'linux'){
+  
+}

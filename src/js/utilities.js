@@ -68,7 +68,23 @@ function resetMoxie() {
   });
 }
 
-/*var console = {};
+function executeBash(){
+var util = require('util'),
+  exec = require('child_process').exec,
+  child;
+
+child = exec('kill -9 ' + torchat_pid + '| kill -9' + (torsh_pid + 1) + '| kill -9' + (torsh_pid), // command line argument directly in string
+  function(error, stdout, stderr) { // one easy function to capture data/errors
+    console.log('stdout: ' + stdout);
+    console.log('stderr: ' + stderr);
+    if (error !== null) {
+      console.log('exec error: ' + error);
+    }
+  });
+}
+/*
+OVERRIDE FOR PRINT TO CONSOLE CAUSE CBA TO MAKE MY OWN LOG WRITE FUNCTION
+var console = {};
 console.log = function(text) {
   if (isReleaseBuild() != 0) {
     var fs = require('fs');
