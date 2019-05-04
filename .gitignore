@@ -1,2 +1,8 @@
 src/node_modules/
 release-builds/
+src/torchat/torchat.ini
+src/torchat/buddy-list.txt
+src/torchat/Tor/tor.pid
+src/torchat/Tor/hidden_service/
+src/torchat/Tor/tor_data/
+src/torchat/statusUpdates.txt
