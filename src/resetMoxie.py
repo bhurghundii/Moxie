@@ -27,6 +27,9 @@ if os.path.isfile("torchat/buddy-list.txt"):
 if os.path.isfile("torchat/Tor/tor.pid"):
     os.remove("torchat/Tor/tor.pid")
 
+if os.path.isfile("torchat/pid-torchat.txt"):
+    os.remove("torchat/pid-torchat.txt")
+
 try:
     shutil.rmtree("torchat/Tor/hidden_service")
 except:
