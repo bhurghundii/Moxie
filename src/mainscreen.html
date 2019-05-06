@@ -4,7 +4,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="css/mainscreen.css">
 <script src="js/utilities.js" type="text/javascript"> </script>
-<script src="js/mainscreen.js" type="text/javascript"> </script>
 
 <body>
   <div class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left" style="display:none; width:20%;  height: 100%; left: -1%;" id="leftMenu">
@@ -39,7 +38,7 @@
 
   </div>
 
-  <button onclick='toggleVisibility("Toolkit")' class="round-button-circle"> M </button>
+  <button onclick='toggleVisibility("Toolkit")' class="round-button-circle"> <div class="icon"> ◤◥ </div> </button>
   <div class="Toolkit" id="Toolkit">
     <button class="tool-button-circle"> </button>
     <button class="toolicon-button-circle" onclick="openLeftMenu()"> <i class="fa fa-users"> </i> </button>
@@ -53,7 +52,7 @@
     <input class="textarea" id="statusSent" type="text" placeholder="Got something to share? Tell everyone!" />
     <button class="postStatusButton" onclick="sendStatusUpdate()"> + </button>
   </div>
-
+  <script src="js/mainscreen.js" type="text/javascript"> </script>
   </div>
   </div>
 </body>

@@ -52,6 +52,13 @@
   left: 1%
 }
 
+.icon{
+  position: relative;
+  left: -17.5%;
+  font-size: 31px;
+  letter-spacing: -0.6em;
+}
+
 .img-circle {
   position: relative;
   border-radius: 50%;
@@ -131,7 +138,7 @@ input.textarea {
   background: #CDCDCD;
   box-shadow: 0 0 3px #CDCDCD;
   position: absolute;
-  left: 37%;
+  left: 37.5%;
   bottom: -10%;
   z-index: 25;
 }

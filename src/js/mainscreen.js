@@ -188,7 +188,7 @@ function StatusUpdate() {
     var data = fs.readFileSync('torchat/statusUpdates.txt', 'utf8')
     for (var i = 0; i < data.split('\n').length - 1; i++) {
       var content = document.getElementById("ContentID")
-      content.innerHTML += "<h2>" + data.split('\n')[i].split('#')[0] + "</h2>" + "<h4>" + data.split('\n')[i].split('#')[1] + "</h4>"
+      content.innerHTML += "<div class='StatusUpdateMessage'> <p style='font-weight: bold;'>" + data.split('\n')[i].split('#')[0] + "</p>" + "<p>" + data.split('\n')[i].split('#')[1] + "</p> <hr style='width: 500px; height:1px;'> </div>"
     }
   }
 
@@ -249,13 +249,12 @@ function exitHandler(options, exitCode) {
 }
 //this one is if they close the window normally
 window.onbeforeunload = confirmExit;
-confirmExit();
+//confirmExit();
 
 function confirmExit() {
   var pdids = fs.readFileSync('torchat/pid-torchat.txt', 'utf8')
   var torchat_pid = pdids.split('|')[1]
   var torsh_pid = pdids.split('|')[3]
-  console.log(torchat_pid + ' ' + tor_pid)
 
   var util = require('util'),
     exec = require('child_process').exec,
