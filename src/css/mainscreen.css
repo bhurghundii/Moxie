@@ -212,15 +212,30 @@ html {
 }
 
 .postStatusButton {
-  width: 100px;
-  height: 100px;
-  border: 10px solid black;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 10px solid orange;
   overflow: hidden;
-  background: black;
-  box-shadow: 0 0 3px black;
+  background: orange;
   position: absolute;
-  right: 10%;
-  bottom: 40%;
+  left: 40%;
+  bottom: 35%;
+  z-index: -1;
 }
 
+.post0-postStatusButton-circle {
+  width: 50px;
+  height: 50px;
+  z-index: 26;
+  border-radius: 50%;
+  border: 10px solid white;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 0 3px white;
+  position: absolute;
+  right: 31%;
+  bottom: 0%;
+  z-index: 10;
+}
 </style>

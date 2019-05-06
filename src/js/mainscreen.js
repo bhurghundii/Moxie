@@ -31,6 +31,7 @@ function sendStatusUpdate() {
   var statusText = document.getElementById("statusSent").value;
   document.getElementById("statusSent").value = ""
   //get your entire friends list
+  console.log('Sending status')
 
   if (isReleaseBuild() == 0) {
     var friendslist = fs.readFileSync('torchat/buddy-list.txt', 'utf8')
