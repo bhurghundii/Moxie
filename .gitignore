@@ -10,3 +10,4 @@ src/torchat/pid-torchat.txt
 src/torchat/Tor/hidden_service/
 src/torchat/Tor/tor_data/
 src/torchat/statusUpdates.txt
+*.pyc

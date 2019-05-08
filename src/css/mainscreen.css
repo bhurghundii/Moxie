@@ -65,6 +65,24 @@
   width: 20%;
 }
 
+.IdInputClass{
+  position: relative;
+  left: 2.5%;
+  width: 30%;
+}
+
+.NameInputClass{
+  position: relative;
+  left: 2.5%;
+  width: 30%;
+}
+
+.AddClass{
+  position: relative;
+  left: 2.5%;
+  width: 30%;
+}
+
 .bumpAnimation {
   height: 60%;
   width: 60%;
