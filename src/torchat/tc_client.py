@@ -645,7 +645,7 @@ class BuddyList(object):
         print "(2) buddy list saved"
 
         # this is the optimal spot to notify the GUI to redraw the list
-        #self.gui(CB_TYPE_LIST_CHANGED, None)
+        self.gui(CB_TYPE_LIST_CHANGED, None)
 
     def logMyselfMessage(self, msg):
         self.own_buddy.onChatMessage("*** %s" % msg)

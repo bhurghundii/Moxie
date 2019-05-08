@@ -101,7 +101,7 @@ input.textarea {
   right: 0px;
   width: 90%;
   height: 100px;
-  z-index: 1;
+  z-index: 2;
   background: #fafafa;
   border: 3px solid black;
   outline: none;
@@ -221,7 +221,7 @@ html {
   position: absolute;
   left: 40%;
   bottom: 35%;
-  z-index: -1;
+  z-index: 1;
 }
 
 .post0-postStatusButton-circle {
