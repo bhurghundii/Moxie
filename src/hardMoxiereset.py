@@ -3,7 +3,6 @@ import shutil
 
 #Reset TorCHAT and Moxie
 
-print 'Soft reset because we do not wanna have to come with a new tree structure again'
 print 'Cleaning MOXIE'
 if os.path.isfile("me.info"):
     os.remove("me.info")
@@ -30,6 +29,16 @@ if os.path.isfile("torchat/Tor/tor.pid"):
 
 if os.path.isfile("torchat/pid-torchat.txt"):
     os.remove("torchat/pid-torchat.txt")
+
+try:
+    shutil.rmtree("torchat/Tor/hidden_service")
+except:
+    pass
+
+try:
+    shutil.rmtree("torchat/Tor/tor_data")
+except:
+    pass
 
 if os.path.isfile("torchat/statusUpdates.txt"):
     os.remove("torchat/statusUpdates.txt")

@@ -282,6 +282,41 @@ class Buddy(object):
             self.status = status
             self.bl.gui(CB_TYPE_STATUS, self)
 
+    def addFriend(address):
+        if len(address) != 16:
+            l = len(address)
+            print 'Address too short'
+            return
+
+        for c in address:
+            if c not in "234567abcdefghijklmnopqrstuvwxyz":
+                print 'Address can only have alphanumeric characters'
+                return
+
+        if self.buddy is None:
+            buddy = tc_client.Buddy(address,
+                          self.bl,
+                          self.txt_name.GetValue())
+            res = self.bl.addBuddy(buddy)
+            if res == False:
+                print 'Address already added'
+            else:
+                if self.txt_intro.GetValue() <> "":
+                    buddy.storeOfflineChatMessage(self.txt_intro.GetValue())
+        else:
+            address_old = self.buddy.address
+            offline_file_name_old = self.buddy.getOfflineFileName()
+            self.buddy.address = address
+            offline_file_name_new = self.buddy.getOfflineFileName()
+            self.buddy.name = self.txt_name.GetValue()
+            self.bl.save()
+            if address != address_old:
+                self.buddy.disconnect()
+                try:
+                    os.rename(offline_file_name_old, offline_file_name_new)
+                except:
+                    pass
+
     def onProfileName(self, name):
         print "(2) %s.onProfile" % self.address
         self.profile_name = name

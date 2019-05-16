@@ -28,7 +28,7 @@ function confirmExit() {
   var util = require('util'),
     exec = require('child_process').exec,
     child;
-
+//check if its possible to rename the name so we can not waste our time finding the tor id
   child = exec('kill -9 ' + torchat_pid + '| kill -9' + (torsh_pid + 1) + '| kill -9' + (torsh_pid), // command line argument directly in string
     function(error, stdout, stderr) { // one easy function to capture data/errors
       console.log('stdout: ' + stdout);
