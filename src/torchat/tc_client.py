@@ -598,25 +598,6 @@ class Buddy(object):
         return line
 
 
-    def sendMessageTWO(self):
-        #this will be called in the incoming status message
-        #FIXME: call this from onStatus() instead, this would be the ntural place for it
-        text = 'Fellas, testing'
-        if text:
-            if self.isFullyConnected():
-                wipeFile(self.getOfflineFileName())
-                print "(2) sending offline messages to %s" % self.address
-                #we send it without checking online status. because we have sent
-                #a pong before, the receiver will have set the status to online.
-                #text is unicode, so we must encode it to UTF-8 again.
-                message = ProtocolMsg_message(self, text.encode("UTF-8"))
-                message.send()
-                self.bl.gui(CB_TYPE_OFFLINE_SENT, self)
-            else:
-                print "(2) could not send offline messages, not fully connected."
-                pass
-
-
 
 class BuddyList(object):
     """the BuddyList object is the central API of the client.
@@ -1557,6 +1538,7 @@ class ProtocolMsg_status(ProtocolMsg):
             if self.buddy.status == STATUS_HANDSHAKE:
                 print "(2) %s came online, sending delayed messages" % self.buddy.address
                 self.buddy.sendOfflineMessages()
+                self.buddy.readSendBuffer()
 
             #set buddy status
             if self.status == "available":
