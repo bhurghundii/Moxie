@@ -367,7 +367,7 @@ class Buddy(object):
                     message = ProtocolMsg_message(self, textToSend.split(':')[1].encode("UTF-8"))
                     message.send()
                     #also send any offline messages
-                    self.buddy.sendOfflineMessages()
+                    self.sendOfflineMessages()
                     youmessage = textToSend.split(':')[1]
                     if (youmessage.split('#')[0] != "status"):
                         file = open(self.address + '.txt', "a")
@@ -1538,7 +1538,6 @@ class ProtocolMsg_status(ProtocolMsg):
             if self.buddy.status == STATUS_HANDSHAKE:
                 print "(2) %s came online, sending delayed messages" % self.buddy.address
                 self.buddy.sendOfflineMessages()
-                self.buddy.readSendBuffer()
 
             #set buddy status
             if self.status == "available":
@@ -1669,6 +1668,7 @@ class ProtocolMsg_message(ProtocolMsg):
                 print self.buddy.address + " " + self.text
                 message = self.text
 
+                '''
                 file = open(self.buddy.address + '.txt', "a")
                 file.write("")
 
@@ -1678,6 +1678,9 @@ class ProtocolMsg_message(ProtocolMsg):
                 else:
                     file = open('statusUpdates.txt', "a")
                     file.write(self.buddy.name + "" + self.text[6:] +"\r\n")
+                '''
+
+                self.buddy.sendChatMessage(self.text)
 
             else:
                 print "(1) ***** protocol violation reply to %s" % self.buddy.address
