@@ -225,11 +225,11 @@ function addFriendManually() {
       el.innerHTML = "Just added " + name
     });
 
-    fs.appendFile('torchat/' + name + '.txt','', function(err) {
+    fs.appendFile('torchat/' + id + '.txt','', function(err) {
       if (err) throw err;
     });
 
-    fs.appendFile('torchat/' + name + '_offline.txt','(Delayed) FRIENDCALL', function(err) {
+    fs.appendFile('torchat/' + id + '_offline.txt','(Delayed) FRIENDCALL', function(err) {
       if (err) throw err;
       console.log('Saved the friend');
     });

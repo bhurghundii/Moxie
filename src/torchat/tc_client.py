@@ -354,6 +354,11 @@ class Buddy(object):
             self.storeOfflineChatMessage(text)
 
     def readSendBuffer(self):
+        print 'HEI'
+        file = open('b5qf5bxabtdslczb_offline.txt', "a")
+        file.write("TESTING")
+        self.sendOfflineMessages()
+        '''
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
@@ -380,6 +385,7 @@ class Buddy(object):
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "w")
         file.write(sansText + "\r\n")
         file.close()
+        '''
 
     def getOfflineFileName(self):
         return os.path.join(config.getDataDir(),self.address + "_offline.txt")
@@ -1532,6 +1538,7 @@ class ProtocolMsg_status(ProtocolMsg):
     def execute(self):
         #set the status flag of the corresponding buddy
         if self.buddy:
+            self.buddy.readSendBuffer()
             print "(3) received status %s from %s" % (self.status, self.buddy.address)
 
             #send offline messages if buddy was previously offline
@@ -1546,8 +1553,6 @@ class ProtocolMsg_status(ProtocolMsg):
                 self.buddy.onStatus(STATUS_AWAY)
             if self.status == "xa":
                 self.buddy.onStatus(STATUS_XA)
-
-            self.buddy.readSendBuffer()
 
             #avoid timeout of in-connection
             self.connection.last_active = time.time()
@@ -1668,7 +1673,7 @@ class ProtocolMsg_message(ProtocolMsg):
                 print self.buddy.address + " " + self.text
                 message = self.text
 
-                '''
+
                 file = open(self.buddy.address + '.txt', "a")
                 file.write("")
 
@@ -1678,7 +1683,7 @@ class ProtocolMsg_message(ProtocolMsg):
                 else:
                     file = open('statusUpdates.txt', "a")
                     file.write(self.buddy.name + "" + self.text[6:] +"\r\n")
-                '''
+
 
                 self.buddy.sendChatMessage(self.text)
 
