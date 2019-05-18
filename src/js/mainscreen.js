@@ -219,12 +219,21 @@ function addFriendManually() {
 
     fs.appendFile('torchat/buddy-list.txt', id + ' ' + name + '\n', function(err) {
       if (err) throw err;
-      console.log('Saved the friend');
       el = document.getElementById('error');
       el.style.visibility = 'visible';
 
       el.innerHTML = "Just added " + name
     });
+
+    fs.appendFile('torchat/' + name + '.txt','', function(err) {
+      if (err) throw err;
+    });
+
+    fs.appendFile('torchat/' + name + '_offline.txt','(Delayed) FRIENDCALL', function(err) {
+      if (err) throw err;
+      console.log('Saved the friend');
+    });
+
   } else {
     el = document.getElementById('error');
     el.style.visibility = 'visible';
