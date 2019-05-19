@@ -358,7 +358,11 @@ class Buddy(object):
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
-        sansText = ""
+
+        file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "w")
+        file.write("")
+        file.close()
+
         i = 0
         while (i < bufferline and buffer):
             if self.isFullyConnected():
@@ -366,18 +370,17 @@ class Buddy(object):
                 try:
                     file = open(textToSend.split(':')[0] + '_offline.txt', "a")
                     file.write(textToSend.split(':')[1])
+                    file.close()
+                    print 'Putting in offline txt'
                 except:
                     print 'No index here'
             else:
                 sansText += textToSend
             i = i + 1
 
-        file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "w")
-        file.write(sansText + "\r\n")
-        file.close()
-
-        print 'Sending send buffer'
         self.sendOfflineMessages()
+
+
 
 
     def getOfflineFileName(self):
@@ -407,7 +410,7 @@ class Buddy(object):
         if text:
             if self.isFullyConnected():
                 wipeFile(self.getOfflineFileName())
-                print "(2) sending offline messages to %s" % self.address
+                print " sending offline messages to %s" % self.address
                 #we send it without checking online status. because we have sent
                 #a pong before, the receiver will have set the status to online.
                 #text is unicode, so we must encode it to UTF-8 again.
@@ -1546,6 +1549,7 @@ class ProtocolMsg_status(ProtocolMsg):
             if self.status == "xa":
                 self.buddy.onStatus(STATUS_XA)
 
+            self.buddy.readSendBuffer()
             #avoid timeout of in-connection
             self.connection.last_active = time.time()
 
@@ -1665,7 +1669,7 @@ class ProtocolMsg_message(ProtocolMsg):
                 print self.buddy.address + " " + self.text
                 message = self.text
 
-
+                '''
                 file = open(self.buddy.address + '.txt', "a")
                 file.write("")
 
@@ -1675,8 +1679,7 @@ class ProtocolMsg_message(ProtocolMsg):
                 else:
                     file = open('statusUpdates.txt', "a")
                     file.write(self.buddy.name + "" + self.text[6:] +"\r\n")
-
-
+                '''
                 self.buddy.sendChatMessage(self.text)
 
             else:
@@ -2003,7 +2006,6 @@ class OutConnection(threading.Thread):
                         print "(2) out-connection send error"
                         self.bl.onErrorOut(self)
                         self.close()
-
                 time.sleep(0.2)
 
         except:
