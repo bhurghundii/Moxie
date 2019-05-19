@@ -1531,7 +1531,6 @@ class ProtocolMsg_status(ProtocolMsg):
     def execute(self):
         #set the status flag of the corresponding buddy
         if self.buddy:
-            self.buddy.readSendBuffer()
             print "(3) received status %s from %s" % (self.status, self.buddy.address)
 
             #send offline messages if buddy was previously offline

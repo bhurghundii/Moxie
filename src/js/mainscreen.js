@@ -216,7 +216,7 @@ function addFriendManually() {
   var name = document.getElementById('nameInput').value;
   if (name && id) {
     const fs = require('fs');
-
+    if (id !== ""){
     fs.appendFile('torchat/buddy-list.txt', id + ' ' + name + '\n', function(err) {
       if (err) throw err;
       el = document.getElementById('error');
@@ -233,6 +233,7 @@ function addFriendManually() {
       if (err) throw err;
       console.log('Saved the friend');
     });
+  }
 
   } else {
     el = document.getElementById('error');
