@@ -354,38 +354,31 @@ class Buddy(object):
             self.storeOfflineChatMessage(text)
 
     def readSendBuffer(self):
-        print 'HEI'
-        file = open('b5qf5bxabtdslczb_offline.txt', "a")
-        file.write("TESTING")
-        self.sendOfflineMessages()
-        '''
+        print 'Reading what ever is in the send buffer'
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
         sansText = ""
         i = 0
-        while (i < bufferline):
-            textToSend = buffer.split('\n')[i]
-            if textToSend.split(':')[0] == self.address:
-                if self.isFullyConnected():
-
-                    message = ProtocolMsg_message(self, textToSend.split(':')[1].encode("UTF-8"))
-                    message.send()
-                    #also send any offline messages
-                    self.sendOfflineMessages()
-                    youmessage = textToSend.split(':')[1]
-                    if (youmessage.split('#')[0] != "status"):
-                        file = open(self.address + '.txt', "a")
-                        file.write("You:" + textToSend.split(':')[1] + "\r\n")
+        while (i < bufferline and buffer):
+            if self.isFullyConnected():
+                textToSend = buffer.split('\n')[i]
+                try:
+                    file = open(textToSend.split(':')[0] + '_offline.txt', "a")
+                    file.write(textToSend.split(':')[1])
+                except:
+                    print 'No index here'
             else:
                 sansText += textToSend
             i = i + 1
 
-        #DELETE LINE FROM BUFFER
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "w")
         file.write(sansText + "\r\n")
         file.close()
-        '''
+
+        print 'Sending send buffer'
+        self.sendOfflineMessages()
+
 
     def getOfflineFileName(self):
         return os.path.join(config.getDataDir(),self.address + "_offline.txt")
