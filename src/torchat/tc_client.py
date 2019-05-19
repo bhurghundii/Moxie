@@ -415,6 +415,7 @@ class Buddy(object):
                 #a pong before, the receiver will have set the status to online.
                 #text is unicode, so we must encode it to UTF-8 again.
                 message = ProtocolMsg_message(self, text.encode("UTF-8"))
+                print "NOW SENDING"
                 message.send()
                 self.bl.gui(CB_TYPE_OFFLINE_SENT, self)
             else:
