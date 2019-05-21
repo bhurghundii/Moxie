@@ -2,6 +2,12 @@
 <link rel="stylesheet" href="css/welcome.css">
 <script src="js/utilities.js" type="text/javascript"> </script>
 
+<style>
+html{
+    overflow: hidden;
+}
+</style>
+
 <body>
   <div class="welcometomox">
     <script>
@@ -17,8 +23,9 @@
       writelog(Date().toLocaleString() + ' Moxie loaded for first time so we introduce \n')
     </script>
     <h1> Welcome to Moxie! </h1>
+    <h2> The Free Social Network. Your Social Network </h2>
     <p> We believe you should be in control of your data, what you say and no one else should tell you so </p>
-    <p> We will not connect your data at all while using the Moxie network and there is no sign up </p>
+    <p> We will not store your data at all while using the Moxie network and there is no sign up </p>
 
     <a onclick="window.location.href = 'rights.html';" class="submitButton">More details</a>
 
@@ -29,6 +36,7 @@
     <br></br>
     <a onclick="saveDetails();" class="submitButton">🡆</a>
   </div>
+
   <script>
     function saveDetails() {
       writelog(Date().toLocaleString() + ' Starting to init Moxie with your name \n')

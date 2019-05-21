@@ -6,6 +6,12 @@ h1{
   font-family:Arial;
   font-size:4em;
 }
+
+h2{
+  font-family:Arial;
+  font-size:2em;
+  color:dark-gray;
+}
 p{
   font-family:Arial;
   font-size:17px;
@@ -56,4 +62,14 @@ a{
       left:5%;
 
 }
+
+.introtomox{
+  position : absolute;
+  text-align: center;
+      height : 90%;
+      bottom: -20%;
+      left:15%;
+
+}
+
 </style>
