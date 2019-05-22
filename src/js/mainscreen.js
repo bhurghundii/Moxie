@@ -229,10 +229,10 @@ function addFriendManually() {
       if (err) throw err;
     });
 
-  /*  fs.appendFile('torchat/' + id + '_offline.txt','(Delayed) FRIENDCALL', function(err) {
+    fs.appendFile('torchat/' + id + '_offline.txt','FRIENDCALL', function(err) {
       if (err) throw err;
       console.log('Saved the friend');
-    }); */
+    });
   }
 
   } else {

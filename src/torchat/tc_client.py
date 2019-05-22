@@ -1552,12 +1552,6 @@ class ProtocolMsg_status(ProtocolMsg):
 
             self.buddy.readSendBuffer()
 
-            if self.isAlreadyPonged():
-                msg = ProtocolMsg_add_me(self.buddy)
-                msg.send()
-            else:
-                print "(2) not connected, not sending add_me to %s" % self.address
-
             #avoid timeout of in-connection
             self.connection.last_active = time.time()
 
