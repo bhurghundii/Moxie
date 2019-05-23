@@ -45,7 +45,7 @@ class MainWindow():
 
         self.conns = []
         self.chat_windows = []
-        self.buddy_list = tc_client.BuddyList(self.callbackMessage, socket)
+        self.buddy_list = tc_client.BuddyList(socket)
 
         print "TorChat: %s" % config.getProfileLongName()
 
@@ -76,6 +76,7 @@ class MainWindow():
             found = False
             while not found:
                 time.sleep(1)
+                print 'TEST TEST'
                 for window in self.chat_windows:
                     if window.buddy == buddy:
                         found = True
@@ -90,9 +91,6 @@ class MainWindow():
             hidden = config.getint("gui", "open_chat_window_hidden")
 
         if callback_type == tc_client.CB_TYPE_FILE:
-            #this happens when an incoming file transfer was initialized
-            #we must now create a FileTransferWindow and return its
-            #event handler method to the caller
             receiver = callback_data
             buddy = receiver.buddy
             file_name = receiver.file_name

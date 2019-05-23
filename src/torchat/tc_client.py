@@ -280,42 +280,6 @@ class Buddy(object):
         self.last_status_time = time.time()
         if status <> self.status:
             self.status = status
-            self.bl.gui(CB_TYPE_STATUS, self)
-
-    def addFriend(address):
-        if len(address) != 16:
-            l = len(address)
-            print 'Address too short'
-            return
-
-        for c in address:
-            if c not in "234567abcdefghijklmnopqrstuvwxyz":
-                print 'Address can only have alphanumeric characters'
-                return
-
-        if self.buddy is None:
-            buddy = tc_client.Buddy(address,
-                          self.bl,
-                          self.txt_name.GetValue())
-            res = self.bl.addBuddy(buddy)
-            if res == False:
-                print 'Address already added'
-            else:
-                if self.txt_intro.GetValue() <> "":
-                    buddy.storeOfflineChatMessage(self.txt_intro.GetValue())
-        else:
-            address_old = self.buddy.address
-            offline_file_name_old = self.buddy.getOfflineFileName()
-            self.buddy.address = address
-            offline_file_name_new = self.buddy.getOfflineFileName()
-            self.buddy.name = self.txt_name.GetValue()
-            self.bl.save()
-            if address != address_old:
-                self.buddy.disconnect()
-                try:
-                    os.rename(offline_file_name_old, offline_file_name_new)
-                except:
-                    pass
 
     def onProfileName(self, name):
         print "(2) %s.onProfile" % self.address
@@ -417,7 +381,6 @@ class Buddy(object):
                 message = ProtocolMsg_message(self, text.encode("UTF-8"))
                 print "NOW SENDING"
                 message.send()
-                self.bl.gui(CB_TYPE_OFFLINE_SENT, self)
             else:
                 print "(2) could not send offline messages, not fully connected."
                 pass
@@ -571,6 +534,7 @@ class Buddy(object):
 
 
     def sendAddMe(self):
+        print 'pinged address'
         if self.isAlreadyPonged():
             msg = ProtocolMsg_add_me(self)
             msg.send()
@@ -614,9 +578,8 @@ class BuddyList(object):
     The GUI will instantiate a BuddyList object and this is all
     it needs to do in order to start the client and access
     all functionality"""
-    def __init__(self, callback, socket=None):
+    def __init__(self, socket=None):
         print "(1) initializing buddy list"
-        self.gui = callback
 
         startPortableTor()
 
@@ -686,9 +649,6 @@ class BuddyList(object):
         f.close()
         print "(2) buddy list saved"
 
-        # this is the optimal spot to notify the GUI to redraw the list
-        self.gui(CB_TYPE_LIST_CHANGED, None)
-
     def logMyselfMessage(self, msg):
         self.own_buddy.onChatMessage("*** %s" % msg)
 
@@ -707,7 +667,6 @@ class BuddyList(object):
 
     def removeBuddy(self, buddy_to_remove, disconnect=True):
         print "(2) removeBuddy(%s, %s)" % (buddy_to_remove.address, disconnect)
-        self.gui(CB_TYPE_REMOVE, buddy_to_remove)
         buddy_to_remove.setActive(False)
 
         if not disconnect:
@@ -926,7 +885,6 @@ class FileSender(threading.Thread):
             self.file_handle = open(self.file_name, mode="rb")
             self.file_handle.seek(0, 2) #SEEK_END
             self.file_size = self.file_handle.tell()
-            self.gui(self.file_size, 0)
             filename_utf8 = self.file_name_short.encode("utf-8")
 
             if not self.buddy.isFullyConnected():
@@ -1449,6 +1407,7 @@ class ProtocolMsg_ping(ProtocolMsg):
         self.buddy.sendProfile()
         self.buddy.sendAvatar()
         if self.buddy in self.bl.list:
+        #    print 'DOES THIS WORK' + self.address
             self.buddy.sendAddMe()
 
         #send status as the last message because the other
@@ -1551,8 +1510,32 @@ class ProtocolMsg_status(ProtocolMsg):
                 self.buddy.onStatus(STATUS_XA)
 
             self.buddy.readSendBuffer()
-
             #avoid timeout of in-connection
+            #self.random1 = str(random.getrandbits(256))
+            self.list = []
+            filename = os.path.join(config.getDataDir(), "buddy-list.txt")
+
+            #create empty buddy list file if it does not already exist
+            f = open(filename, "a")
+            f.close()
+
+            f = open(filename, "r")
+            l = f.read().replace("\r", "\n").replace("\n\n", "\n").split("\n")
+            f.close
+            for line in l:
+                line = line.rstrip().decode("UTF-8")
+                if len(line) > 15:
+                    address = line[0:16]
+                    if len(line) > 17:
+                        name = line[17:]
+                    else:
+                        name = u""
+                    print (address)
+                    buddy = Buddy(address, self.bl, name)
+                    buddy.sendAddMe()
+
+
+
             self.connection.last_active = time.time()
 
 
