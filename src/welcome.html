@@ -9,6 +9,11 @@ html{
 </style>
 
 <body>
+  <div class="introtomox">
+    <h1> Welcome to Moxie </h1>
+    <h2> Your Social Network </h2>
+  </div>
+
   <div class="welcometomox">
     <script>
       function writelog(text) {
@@ -22,19 +27,11 @@ html{
 
       writelog(Date().toLocaleString() + ' Moxie loaded for first time so we introduce \n')
     </script>
-    <h1> Welcome to Moxie! </h1>
-    <h2> The Free Social Network. Your Social Network </h2>
-    <p> We believe you should be in control of your data, what you say and no one else should tell you so </p>
-    <p> We will not store your data at all while using the Moxie network and there is no sign up </p>
-
-    <a onclick="window.location.href = 'rights.html';" class="submitButton">More details</a>
-
-
-    <p> So! What do you want to be known as? </p>
-
+    <h1> Let's get started </h1>
+    <h2> What do you want to be known as on Moxie? </h2>
     <input class="tb5" id="submitButton" type="text" name="firstname" value="">
     <br></br>
-    <a onclick="saveDetails();" class="submitButton">🡆</a>
+    <button onclick="saveDetails();" class="RightButton">Make an account and proceed</button>
   </div>
 
   <script>
@@ -64,5 +61,4 @@ html{
       window.location.href = 'mainscreen.html';
     }
   </script>
-
 </html>

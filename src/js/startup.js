@@ -119,12 +119,12 @@ function appeardiv3() {
   console.log(Date().toLocaleString() + ' Checking if me.info exists so we can go to the right place \n')
   if (fs.existsSync('me.info') == false) {
     fs.openSync('me.info', 'w');
-    window.location.href = 'welcome.html';
+    window.location.href = 'rights.html';
 
   } else {
     var checkIfEmpty = fs.readFileSync('me.info', 'utf8')
     if (checkIfEmpty == "") {
-      window.location.href = 'welcome.html';
+      window.location.href = 'rights.html';
     } else
       window.location.href = 'mainscreen.html';
   }

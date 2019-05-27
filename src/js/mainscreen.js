@@ -151,33 +151,39 @@ function checkTorChatStatus() {
     document.getElementById("Status").innerHTML = 'MOXIE is not online. We are getting ready...';
   }
 }
+var LeftMenuisActive = false;
+var RightMenuisActive = false;
 
-function openLeftMenu() {
-  document.getElementById("leftMenu").style.display = "block";
+function toggleLeftMenu() {
+  if (LeftMenuisActive == false) {
+    document.getElementById("leftMenu").style.display = "block";
+    LeftMenuisActive = true;
+  } else {
+    document.getElementById("leftMenu").style.display = "none";
+    LeftMenuisActive = false;
+  }
 }
 
-function closeLeftMenu() {
-  document.getElementById("leftMenu").style.display = "none";
-}
-
-function openRightMenu() {
-  document.getElementById("rightMenu").style.display = "block";
-  var data = "TRUE"
-  fs.writeFile('statusMainScreen.txt', data,
-    function(err) {
-      if (err) throw err;
-      console.log("Data is written to file successfully.")
-    });
-}
-
-function closeRightMenu() {
-  document.getElementById("rightMenu").style.display = "none";
-  var data = "FALSE"
-  fs.writeFile('statusMainScreen.txt', data,
-    function(err) {
-      if (err) throw err;
-      console.log("Data is written to file successfully.")
-    });
+function toggleRightMenu() {
+  if (RightMenuisActive == false) {
+    document.getElementById("rightMenu").style.display = "block";
+    var data = "TRUE"
+    fs.writeFile('statusMainScreen.txt', data,
+      function(err) {
+        if (err) throw err;
+        console.log("Data is written to file successfully.")
+      });
+    RightMenuisActive = true;
+  } else {
+    document.getElementById("rightMenu").style.display = "none";
+    var data = "FALSE"
+    fs.writeFile('statusMainScreen.txt', data,
+      function(err) {
+        if (err) throw err;
+        console.log("Data is written to file successfully.")
+      });
+    RightMenuisActive = false;
+  }
 }
 
 
@@ -187,10 +193,15 @@ StatusUpdate();
 function StatusUpdate() {
   if (isReleaseBuild() == 0) {
     var data = fs.readFileSync('torchat/statusUpdates.txt', 'utf8')
+    if (data == ''){
+      var content = document.getElementById("ContentID")
+      content.innerHTML = "<div class='StatusUpdateMessage'> <h1 style='font-weight: bold; color: gray; ' > There are no status messages to show </h1> </div>"
+    } else {
     for (var i = 0; i < data.split('\n').length - 1; i++) {
       var content = document.getElementById("ContentID")
       content.innerHTML += "<div class='StatusUpdateMessage'> <p style='font-weight: bold;'>" + data.split('\n')[i].split('#')[0] + "</p>" + "<p>" + data.split('\n')[i].split('#')[1] + "</p> <hr style='width: 500px; height:1px;'> </div>"
     }
+  }
   }
 
   if (isReleaseBuild() == 1) {
@@ -216,24 +227,31 @@ function addFriendManually() {
   var name = document.getElementById('nameInput').value;
   if (name && id) {
     const fs = require('fs');
-    if (id !== ""){
-    fs.appendFile('torchat/buddy-list.txt', id + ' ' + name + '\n', function(err) {
-      if (err) throw err;
-      el = document.getElementById('error');
-      el.style.visibility = 'visible';
+    if (id !== "") {
+      var obj = new Object();
+      obj.sender = "Me";
+      obj.reciever = id;
+      obj.textValue = '!PINGBACKPROTOCOL!';
+      obj.textType = "AddFriend";
+      var jsonString = JSON.stringify(obj);
 
-      el.innerHTML = "Just added " + name
-    });
+      fs.appendFile('torchat/buddy-list.txt', id + ' ' + name + '\n', function(err) {
+        if (err) throw err;
+        el = document.getElementById('error');
+        el.style.visibility = 'visible';
 
-    fs.appendFile('torchat/' + id + '.txt','', function(err) {
-      if (err) throw err;
-    });
+        el.innerHTML = "Just added " + name
+      });
 
-    fs.appendFile('torchat/' + id + '_offline.txt','FRIENDCALL', function(err) {
-      if (err) throw err;
-      console.log('Saved the friend');
-    });
-  }
+      fs.appendFile('torchat/' + id + '.txt', jsonString, function(err) {
+        if (err) throw err;
+      });
+
+      fs.appendFile('torchat/' + id + '_offline.txt', jsonString, function(err) {
+        if (err) throw err;
+        console.log('Saved the friend');
+      });
+    }
 
   } else {
     el = document.getElementById('error');

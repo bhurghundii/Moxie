@@ -57,10 +57,19 @@ a{
 .welcometomox{
   position : absolute;
   text-align: center;
-      height : 90%;
-      bottom: 5%;
-      left:5%;
+	bottom: 20%;
+	left: 0;
+	right: 0;
 
+	margin: auto;
+
+      animation: cssAnimation 3s 4s linear forwards;
+      opacity: 0;
+}
+
+
+@keyframes cssAnimation {
+to   { opacity: 1; }
 }
 
 .introtomox{
@@ -69,7 +78,30 @@ a{
       height : 90%;
       bottom: -20%;
       left:15%;
+      -webkit-animation: fadeinout 4s linear forwards;
+      animation: fadeinout 4s linear forwards;
+  opacity: 0;
+}
 
+@-webkit-keyframes fadeinout {
+  50% { opacity: 1; }
+}
+
+@keyframes fadeinout {
+  50% { opacity: 1; }
+}
+
+.RightButton {
+  background-color: #af4c4c;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
 }
 
 </style>

@@ -17,21 +17,27 @@
     <button onclick="sendText()" class="sendButton">Send</button>
   </div>
 
-  
+
   <script>
     var chat = document.getElementById("buddyname")
     chat.innerHTML += localStorage.friendChat.split(' ')[1]
 
     function sendText() {
-
-
-
       if (isReleaseBuild() == 0) {
         var textToSend = document.getElementById("textSent").value
         document.getElementById("textSent").value = ""
-        console.log(textToSend)
+
+        //Parse to JSON
+        var obj = new Object();
+        obj.sender = "Me";
+        obj.reciever  = localStorage.friendChat.split(' ')[0];
+        obj.textValue = textToSend;
+        obj.textType = "SimpleMessage";
+        var jsonString = JSON.stringify(obj);
+
         const fs = require('fs');
-        fs.appendFile("sendBuffer.txt", localStorage.friendChat.split(' ')[0] + ":" + textToSend + "\n", function(err) {
+
+        fs.appendFile("sendBuffer.txt", jsonString + "\n", function(err) {
           if (err) {
             return console.log(err);
           }

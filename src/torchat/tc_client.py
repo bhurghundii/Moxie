@@ -30,6 +30,7 @@ import tempfile
 import hashlib
 import config
 import version
+import json
 
 TORCHAT_PORT = 11009 #do NOT change this.
 TOR_CONFIG = "tor" #the name of the active section in the .ini file
@@ -318,6 +319,7 @@ class Buddy(object):
             self.storeOfflineChatMessage(text)
 
     def readSendBuffer(self):
+        #EXAMPLE {"sender":"Me","reciever":"oamdv7xq7k5stmg2","textValue":"aag","textType":"SimpleMessage"}
         print 'Reading what ever is in the send buffer'
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "r")
         buffer = file.read()
@@ -330,14 +332,40 @@ class Buddy(object):
         i = 0
         while (i < bufferline and buffer):
             if self.isFullyConnected():
-                textToSend = buffer.split('\n')[i]
+                #break json line
                 try:
-                    file = open(textToSend.split(':')[0] + '_offline.txt', "a")
-                    file.write(textToSend.split(':')[1])
-                    file.close()
-                    print 'Putting in offline txt'
+                    s = buffer.split('\n')[i]
+                    d = json.loads(s)
+                    if d['textType'] == 'AddFriend':
+                        self.list = []
+                        filename = os.path.join(config.getDataDir(), "buddy-list.txt")
+
+                        #create empty buddy list file if it does not already exist
+                        f = open(filename, "a")
+                        f.close()
+
+                        f = open(filename, "r")
+                        l = f.read().replace("\r", "\n").replace("\n\n", "\n").split("\n")
+                        f.close
+                        for line in l:
+                            line = line.rstrip().decode("UTF-8")
+                            if len(line) > 15:
+                                address = line[0:16]
+                                if len(line) > 17:
+                                    name = line[17:]
+                                else:
+                                    name = u""
+                                print (address)
+                                buddy = Buddy(address, self.bl, name)
+                                buddy.sendAddMe()
+                    else:
+                        file = open(d['reciever'] + '_offline.txt', "a")
+                        file.write(s)
+                        print s
+                        file.close()
+                        print 'Putting in offline txt'
                 except:
-                    print 'No index here'
+                    print 'Nothing to decode here...'
             else:
                 sansText += textToSend
             i = i + 1
@@ -1512,6 +1540,7 @@ class ProtocolMsg_status(ProtocolMsg):
             self.buddy.readSendBuffer()
             #avoid timeout of in-connection
             #self.random1 = str(random.getrandbits(256))
+            '''
             self.list = []
             filename = os.path.join(config.getDataDir(), "buddy-list.txt")
 
@@ -1535,7 +1564,7 @@ class ProtocolMsg_status(ProtocolMsg):
                     buddy.sendAddMe()
 
 
-
+            '''
             self.connection.last_active = time.time()
 
 
