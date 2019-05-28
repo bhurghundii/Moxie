@@ -1,6 +1,7 @@
 /* This is a libary of functions for Moxie which persist on every page.
 Functions which are useful for processing or reading / writing or whatever go here */
 
+//This hides or shows a div.
 function toggleVisibility(id_tag) {
   current_tag = document.getElementById(id_tag).style.display
   if (current_tag == "") {
@@ -11,8 +12,7 @@ function toggleVisibility(id_tag) {
   }
 }
 
-
-
+//When you build (BUILDSCRIPTS), you sed into a release flag file your target platform
 //0 is dev, 1 is LINUX, 2 is Windows, 3 is Android, 4 is IOS.
 function isReleaseBuild() {
   var fs = require('fs');
@@ -32,7 +32,8 @@ function isReleaseBuild() {
   return isRelease
 }
 
-
+//Cleans out Moxie by getting rid of the Tor files that it needs to make a route
+//Deletes your personal Moxie details like your send buffer and self generated info
 function resetMoxie() {
   console.log('Cleaning MOXIE')
   fs.unlink('me.info', (err) => {
@@ -68,30 +69,19 @@ function resetMoxie() {
   });
 }
 
-function executeBash(){
-var util = require('util'),
-  exec = require('child_process').exec,
-  child;
+//This was the old kill command. Only works on systems which support bash
+//Kills torchat
+function executeKILLSig() {
+  var util = require('util'),
+    exec = require('child_process').exec,
+    child;
 
-child = exec('kill -9 ' + torchat_pid + '| kill -9' + (torsh_pid + 1) + '| kill -9' + (torsh_pid), // command line argument directly in string
-  function(error, stdout, stderr) { // one easy function to capture data/errors
-    console.log('stdout: ' + stdout);
-    console.log('stderr: ' + stderr);
-    if (error !== null) {
-      console.log('exec error: ' + error);
-    }
-  });
-}
-/*
-OVERRIDE FOR PRINT TO CONSOLE CAUSE CBA TO MAKE MY OWN LOG WRITE FUNCTION
-var console = {};
-console.log = function(text) {
-  if (isReleaseBuild() != 0) {
-    var fs = require('fs');
-    fs.appendFile("moxielogout.txt", text, function(err) {
-      if (err) {
-        return console.log(err);
+  child = exec('kill -9 ' + torchat_pid + '| kill -9' + (torsh_pid + 1) + '| kill -9' + (torsh_pid), // command line argument directly in string
+    function(error, stdout, stderr) { // one easy function to capture data/errors
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
       }
     });
-  }
-}; */
+}

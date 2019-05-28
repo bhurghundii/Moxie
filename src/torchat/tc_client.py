@@ -1679,8 +1679,6 @@ class ProtocolMsg_message(ProtocolMsg):
         #to open a chat window and/or display the text.
         if self.buddy:
             if self.buddy in self.bl.list:
-
-                print self.buddy.address + " " + self.text
                 message = self.text
 
                 '''
@@ -1910,7 +1908,20 @@ class Receiver(threading.Thread):
                     readbuffer = temp.pop()
 
                     for line in temp:
+
                         if self.running:
+                            print line
+                            try:
+                            #    message {"sender":"Me","reciever":"g5mlo4lohqjpm5tf","textValue":"my stupid child","textType":"Status"}
+                                print line.split(' ')[1]
+                                d = json.loads(line.split('message ')[1])
+                                print d['textType']
+                                print d['textValue']
+                                if (d['textValue'] == 'Status'):
+                                    file = open('statusUpdates.txt', "a")
+                                    file.write(d['reciever'] + "" + d['textValue'] +"\r\n")
+                            except:
+                                print '(2) There is nothing to decode, could be a ping'
                             try:
                                 # on outgoing connections we do not allow any
                                 # incoming messages other than file*

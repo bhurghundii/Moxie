@@ -25,6 +25,21 @@ function mainPageStart() {
   });
 
 }
+getIDandName();
+function getIDandName() {
+file = "me.info";
+fs = require('fs')
+fs.readFile(file, 'utf8', function(err, data) {
+  if (err) {
+    return console.log(err);
+  }
+  console.log(data);
+  el = document.getElementById('id');
+  el.innerHTML += data.split(' ')[0];
+  el = document.getElementById('name');
+  el.innerHTML += data.split(' ')[1];
+});
+}
 
 function sendStatusUpdate() {
 
@@ -49,7 +64,14 @@ function sendStatusUpdate() {
   for (var i = 0; i < friendslist.split('\n').length - 1; i++) {
     console.log(friendslist.split('\n')[i].split(' ')[0] + " " + statusText)
     if (isReleaseBuild() == 0) {
-      fs.appendFile("sendBuffer.txt", friendslist.split('\n')[i].split(' ')[i] + ":status#" + statusText + "\n", function(err) {
+      var obj = new Object();
+      obj.sender = "Me";
+      obj.reciever = friendslist.split('\n')[i].split(' ')[i];
+      obj.textValue = statusText;
+      obj.textType = "Status";
+      var jsonString = JSON.stringify(obj);
+
+      fs.appendFile("sendBuffer.txt", jsonString + "\n", function(err) {
         if (err) {
           return console.log(err);
         }
@@ -193,15 +215,15 @@ StatusUpdate();
 function StatusUpdate() {
   if (isReleaseBuild() == 0) {
     var data = fs.readFileSync('torchat/statusUpdates.txt', 'utf8')
-    if (data == ''){
+    if (data == '') {
       var content = document.getElementById("ContentID")
       content.innerHTML = "<div class='StatusUpdateMessage'> <h1 style='font-weight: bold; color: gray; ' > There are no status messages to show </h1> </div>"
     } else {
-    for (var i = 0; i < data.split('\n').length - 1; i++) {
-      var content = document.getElementById("ContentID")
-      content.innerHTML += "<div class='StatusUpdateMessage'> <p style='font-weight: bold;'>" + data.split('\n')[i].split('#')[0] + "</p>" + "<p>" + data.split('\n')[i].split('#')[1] + "</p> <hr style='width: 500px; height:1px;'> </div>"
+      for (var i = 0; i < data.split('\n').length - 1; i++) {
+        var content = document.getElementById("ContentID")
+        content.innerHTML += "<div class='StatusUpdateMessage'> <p style='font-weight: bold;'>" + data.split('\n')[i].split('#')[0] + "</p>" + "<p>" + data.split('\n')[i].split('#')[1] + "</p> <hr style='width: 500px; height:1px;'> </div>"
+      }
     }
-  }
   }
 
   if (isReleaseBuild() == 1) {
