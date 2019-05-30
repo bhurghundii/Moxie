@@ -318,25 +318,31 @@ class Buddy(object):
         else:
             self.storeOfflineChatMessage(text)
 
-    def readSendBuffer(self):
+    def mainMessageFunction(self):
         #EXAMPLE {"sender":"Me","reciever":"oamdv7xq7k5stmg2","textValue":"aag","textType":"SimpleMessage"}
-        print 'Reading what ever is in the send buffer'
+        #Reading the send buffer which basically is the message bridge between Torchat and Moxie
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
 
+        #Clearing out the sendbuffer
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "w")
         file.write("")
         file.close()
 
+        #Read Send Buffer and decide what to do with the message.
         i = 0
         while (i < bufferline and buffer):
             if self.isFullyConnected():
                 #break json line
                 try:
+                    #Break each line
                     s = buffer.split('\n')[i]
                     d = json.loads(s)
+
+                    #Check if it's a request to add a friend
                     if d['textType'] == 'AddFriend':
+
                         self.list = []
                         filename = os.path.join(config.getDataDir(), "buddy-list.txt")
 
@@ -358,22 +364,31 @@ class Buddy(object):
                                 print (address)
                                 buddy = Buddy(address, self.bl, name)
                                 buddy.sendAddMe()
-                    else:
+
+                                file = open('AddBuffer.txt', "a")
+                                file.write(address + ' ' + name)
+
+                    if d['textType'] == 'SimpleMessage':
                         file = open(d['reciever'] + '_offline.txt', "a")
                         file.write(s)
                         print s
                         file.close()
-                        print 'Putting in offline txt'
+
                 except:
                     print 'Nothing to decode here...'
             else:
                 sansText += textToSend
             i = i + 1
 
+        self.sendPingsToNewFriends()
         self.sendOfflineMessages()
 
 
-
+    def sendPingsToNewFriends(self):
+        file = open('addBuffer.txt'), "r")
+        buffer = file.read()
+        bufferline = len(buffer.split('\n'))
+        print buffer
 
     def getOfflineFileName(self):
         return os.path.join(config.getDataDir(),self.address + "_offline.txt")
@@ -1537,34 +1552,10 @@ class ProtocolMsg_status(ProtocolMsg):
             if self.status == "xa":
                 self.buddy.onStatus(STATUS_XA)
 
-            self.buddy.readSendBuffer()
+            #This function handles all the message sending
+            self.buddy.mainMessageFunction()
             #avoid timeout of in-connection
-            #self.random1 = str(random.getrandbits(256))
-            '''
-            self.list = []
-            filename = os.path.join(config.getDataDir(), "buddy-list.txt")
 
-            #create empty buddy list file if it does not already exist
-            f = open(filename, "a")
-            f.close()
-
-            f = open(filename, "r")
-            l = f.read().replace("\r", "\n").replace("\n\n", "\n").split("\n")
-            f.close
-            for line in l:
-                line = line.rstrip().decode("UTF-8")
-                if len(line) > 15:
-                    address = line[0:16]
-                    if len(line) > 17:
-                        name = line[17:]
-                    else:
-                        name = u""
-                    print (address)
-                    buddy = Buddy(address, self.bl, name)
-                    buddy.sendAddMe()
-
-
-            '''
             self.connection.last_active = time.time()
 
 
