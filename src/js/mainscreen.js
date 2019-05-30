@@ -25,6 +25,7 @@ function mainPageStart() {
   });
 
 }
+/*
 getIDandName();
 function getIDandName() {
 file = "me.info";
@@ -40,6 +41,7 @@ fs.readFile(file, 'utf8', function(err, data) {
   el.innerHTML += data.split(' ')[1];
 });
 }
+*/
 
 function sendStatusUpdate() {
 

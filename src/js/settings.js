@@ -1,4 +1,4 @@
-<script>
+
   function showPromptReset() {
     el = document.getElementById('popup1');
     el.style.visibility = 'visible';
@@ -78,4 +78,3 @@
     }
     return isRelease
   }
-</script>

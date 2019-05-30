@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['torchat.py'],
-             pathex=['/home/ubuntu/Moxie/src/torchat'],
+a = Analysis(['bump.py'],
+             pathex=['/home/ubuntu/Moxie/src'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -21,7 +21,7 @@ exe = EXE(pyz,
           a.scripts,
           [],
           exclude_binaries=True,
-          name='torchat',
+          name='bump',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
@@ -33,4 +33,4 @@ coll = COLLECT(exe,
                a.datas,
                strip=False,
                upx=True,
-               name='torchat')
+               name='bump')
