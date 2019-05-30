@@ -385,7 +385,7 @@ class Buddy(object):
 
 
     def sendPingsToNewFriends(self):
-        file = open('addBuffer.txt'), "r")
+        file = open('addBuffer.txt', "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
         print buffer
