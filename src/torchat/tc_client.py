@@ -320,11 +320,19 @@ class Buddy(object):
 
     def mainMessageFunction(self):
         #EXAMPLE {"sender":"Me","reciever":"oamdv7xq7k5stmg2","textValue":"aag","textType":"SimpleMessage"}
+
+        #message {"sender":"Me","reciever":"c2w5qyr77ivhhiar","textValue":"!PINGBACKPROTOCOL!","textType":"AddFriend"}
+
         #Reading the send buffer which basically is the message bridge between Torchat and Moxie
+
+        file = open('AddBuffer.txt', "a")
+        file.write('')
+
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
-
+        
+        print buffer
         #Clearing out the sendbuffer
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "w")
         file.write("")
@@ -341,8 +349,10 @@ class Buddy(object):
                     d = json.loads(s)
 
                     #Check if it's a request to add a friend
-                    if d['textType'] == 'AddFriend':
+                    print d['textType']
 
+                    if d['textType'] == 'AddFriend':
+                        print 'Got an AddFriend'
                         self.list = []
                         filename = os.path.join(config.getDataDir(), "buddy-list.txt")
 
@@ -385,7 +395,7 @@ class Buddy(object):
 
 
     def sendPingsToNewFriends(self):
-        file = open('addBuffer.txt', "r")
+        file = open('AddBuffer.txt', "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
         print buffer
