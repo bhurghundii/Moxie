@@ -31,52 +31,9 @@
   left: 96%
 }
 
-#leftMenu {
-  -webkit-animation: flyinleftanim 1s ease;
-}
 
-#leftMenu:active {
-  -webkit-animation: flyinrightanim 1s ease;
-}
 
-#rightMenu {
-  -webkit-animation: flyinrightanim 1s ease;
-  padding-left: 40px;
-  padding-right: 40px;
-}
 
-@-webkit-keyframes flyinleftanim {
-  0% {
-    -webkit-transform: translateX(-500px);
-  }
-
-  100% {
-    -webkit-transform: translateX(0px);
-  }
-}
-
-#rightMenu {
-  -webkit-animation: flyinrightanim 1s ease;
-}
-
-@-webkit-keyframes flyinrightanim {
-  0% {
-    -webkit-transform: translateX(500px);
-  }
-
-  100% {
-    -webkit-transform: translateX(0px);
-  }
-}
-
-@-webkit-keyframes flyinupanim {
-  0%   {
-transform: translateY(200%);
-}
-100% {
-transform: translateY(0%);
-}
-}
 
 #buttonBump {
   max-width: 65%;

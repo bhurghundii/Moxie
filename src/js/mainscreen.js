@@ -25,23 +25,28 @@ function mainPageStart() {
   });
 
 }
-/*
-getIDandName();
-function getIDandName() {
-file = "me.info";
-fs = require('fs')
-fs.readFile(file, 'utf8', function(err, data) {
-  if (err) {
-    return console.log(err);
-  }
-  console.log(data);
-  el = document.getElementById('id');
-  el.innerHTML += data.split(' ')[0];
-  el = document.getElementById('name');
-  el.innerHTML += data.split(' ')[1];
-});
+
+function getID() {
+  file = "me.info";
+  var fs = require('fs');
+  fs.readFile(file, 'utf8', function(err, data) {
+    if (err) {
+      return console.log(err);
+    }
+    return data.split(' ')[0];
+  });
 }
-*/
+
+function getName() {
+  file = "me.info";
+  var fs = require('fs');
+  fs.readFile(file, 'utf8', function(err, data) {
+    if (err) {
+      return console.log(err);
+    }
+    return data.split(' ')[1];
+  });
+}
 
 function sendStatusUpdate() {
 
@@ -67,7 +72,7 @@ function sendStatusUpdate() {
     console.log(friendslist.split('\n')[i].split(' ')[0] + " " + statusText)
     if (isReleaseBuild() == 0) {
       var obj = new Object();
-      obj.sender = "Me";
+      obj.sender = getID();
       obj.reciever = friendslist.split('\n')[i].split(' ')[i];
       obj.textValue = statusText;
       obj.textType = "Status";
@@ -253,12 +258,15 @@ function addFriendManually() {
     const fs = require('fs');
     if (id !== "") {
       var obj = new Object();
-      obj.sender = "Me";
+      obj.sender = getID();
+      obj.senderName = getName();
       obj.reciever = id;
-      obj.textValue = '!PINGBACKPROTOCOL!';
+      obj.recieverName = name;
+      obj.textValue = '!PINGBACKPROTOCOL';
       obj.textType = "AddFriend";
       var jsonString = JSON.stringify(obj);
 
+      console.log(jsonString);
       fs.appendFile('torchat/buddy-list.txt', id + ' ' + name + '\n', function(err) {
         if (err) throw err;
         el = document.getElementById('error');
@@ -267,7 +275,7 @@ function addFriendManually() {
         el.innerHTML = "Just added " + name
       });
 
-      fs.appendFile('torchat/' + id + '.txt', jsonString, function(err) {
+      fs.appendFile('sendBuffer.txt', jsonString, function(err) {
         if (err) throw err;
       });
 

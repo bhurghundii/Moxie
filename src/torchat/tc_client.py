@@ -324,14 +324,17 @@ class Buddy(object):
         #message {"sender":"Me","reciever":"c2w5qyr77ivhhiar","textValue":"!PINGBACKPROTOCOL!","textType":"AddFriend"}
 
         #Reading the send buffer which basically is the message bridge between Torchat and Moxie
-
+        print 'Looping over the mainMessageFunction'
         file = open('AddBuffer.txt', "a")
-        file.write('')
+        file.close()
+
+        file = open('aknowledgeFriend.txt', "a")
+        file.close()
 
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
-        
+
         print buffer
         #Clearing out the sendbuffer
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "w")
@@ -346,37 +349,15 @@ class Buddy(object):
                 try:
                     #Break each line
                     s = buffer.split('\n')[i]
+                    print s
                     d = json.loads(s)
 
                     #Check if it's a request to add a friend
-                    print d['textType']
 
                     if d['textType'] == 'AddFriend':
                         print 'Got an AddFriend'
-                        self.list = []
-                        filename = os.path.join(config.getDataDir(), "buddy-list.txt")
-
-                        #create empty buddy list file if it does not already exist
-                        f = open(filename, "a")
-                        f.close()
-
-                        f = open(filename, "r")
-                        l = f.read().replace("\r", "\n").replace("\n\n", "\n").split("\n")
-                        f.close
-                        for line in l:
-                            line = line.rstrip().decode("UTF-8")
-                            if len(line) > 15:
-                                address = line[0:16]
-                                if len(line) > 17:
-                                    name = line[17:]
-                                else:
-                                    name = u""
-                                print (address)
-                                buddy = Buddy(address, self.bl, name)
-                                buddy.sendAddMe()
-
-                                file = open('AddBuffer.txt', "a")
-                                file.write(address + ' ' + name)
+                        file = open('AddBuffer.txt', "a")
+                        file.write(d['reciever'] + ' ' + d['recieverName'])
 
                     if d['textType'] == 'SimpleMessage':
                         file = open(d['reciever'] + '_offline.txt', "a")
@@ -391,6 +372,7 @@ class Buddy(object):
             i = i + 1
 
         self.sendPingsToNewFriends()
+        self.returnPingsFromNewFriends()
         self.sendOfflineMessages()
 
 
@@ -398,7 +380,47 @@ class Buddy(object):
         file = open('AddBuffer.txt', "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
+        i = 0
+
+        while (i < bufferline and buffer):
+            if self.isFullyConnected():
+                s = buffer.split('\n')[i]
+                print s
+
+                self.list = []
+                filename = os.path.join(config.getDataDir(), "buddy-list.txt")
+
+                #create empty buddy list file if it does not already exist
+                f = open(filename, "a")
+                f.close()
+
+                f = open(filename, "r")
+                l = f.read().replace("\r", "\n").replace("\n\n", "\n").split("\n")
+                f.close
+                for line in l:
+                    line = line.rstrip().decode("UTF-8")
+                    if len(line) > 15:
+                        address = line[0:16]
+                        if len(line) > 17:
+                            name = line[17:]
+                        else:
+                            name = u""
+                        print (address)
+                        buddy = Buddy(address, self.bl, name)
+                        print 'Pinging ' + address 
+                        buddy.sendAddMe()
+
+            i = i + 1
+
+
+    def returnPingsFromNewFriends(self):
+        file = open('aknowledgeFriend.txt', "r")
+        buffer = file.read()
+        bufferline = len(buffer.split('\n'))
         print buffer
+
+
+
 
     def getOfflineFileName(self):
         return os.path.join(config.getDataDir(),self.address + "_offline.txt")
@@ -1921,6 +1943,18 @@ class Receiver(threading.Thread):
                                 if (d['textValue'] == 'Status'):
                                     file = open('statusUpdates.txt', "a")
                                     file.write(d['reciever'] + "" + d['textValue'] +"\r\n")
+
+                                #On recieving an Add Friend
+                                if (d['textValue'] == 'AddFriend'):
+                                    file = open('buddy-list.txt', "a")
+                                    file.write("\r\n" + d['sender'] + " " + d['textValue'])
+                                    file = open(d['sender'] + '_offline.txt', "a")
+                                    file.write('{"sender":"' + d['reciever'] + ' ","reciever":"' + d['sender'] + '","textValue":"!PINGBACKPROTOCOL!","textType":"ReturnFriend"}')
+
+                                if (d['textValue'] == 'ReturnFriend'):
+                                    pass
+                                    #Get value of who this is returning from and delete it if it's in the list
+
                             except:
                                 print '(2) There is nothing to decode, could be a ping'
                             try:
