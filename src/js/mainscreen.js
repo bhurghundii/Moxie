@@ -279,11 +279,11 @@ function addFriendManually() {
         if (err) throw err;
       });
 
-      fs.appendFile('torchat/' + id + '_offline.txt', jsonString, function(err) {
+    /*  fs.appendFile('torchat/' + id + '_offline.txt', jsonString, function(err) {
         if (err) throw err;
         console.log('Saved the friend');
       });
-    }
+    } */
 
   } else {
     el = document.getElementById('error');

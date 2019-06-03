@@ -372,17 +372,14 @@ class Buddy(object):
             i = i + 1
 
         self.sendPingsToNewFriends()
-
-
-
+        self.returnPingsFromNewFriends()
+        self.sendOfflineMessages()
 
 
     def sendPingsToNewFriends(self):
-        '''
         file = open('AddBuffer.txt', "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
-        '''
         i = 0
 
         while (i < bufferline and buffer):
@@ -409,9 +406,19 @@ class Buddy(object):
                         else:
                             name = u""
                         buddy = Buddy(address, self.bl, name)
-                        buddy.sendAddMe()
+                        self.bl.addBuddy(buddy)
+                        print 'Pinging ' + address
+                    #    buddy.sendAddMe()
+                        buddy.storeOfflineChatMessage('Test')
 
             i = i + 1
+
+
+    def returnPingsFromNewFriends(self):
+        file = open('aknowledgeFriend.txt', "r")
+        buffer = file.read()
+        bufferline = len(buffer.split('\n'))
+        print buffer
 
 
 
@@ -1580,7 +1587,6 @@ class ProtocolMsg_status(ProtocolMsg):
 
             #This function handles all the message sending
             self.buddy.mainMessageFunction()
-            self.buddy.sendOfflineMessages()
             #avoid timeout of in-connection
 
             self.connection.last_active = time.time()
