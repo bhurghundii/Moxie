@@ -365,6 +365,12 @@ class Buddy(object):
                         print s
                         file.close()
 
+                    if d['textType'] == 'Status':
+                        file = open('statusUpdates.txt', "a")
+                        file.write(s)
+                        print s
+                        file.close()
+
                 except:
                     print 'Nothing to decode here...'
             else:
@@ -1934,22 +1940,27 @@ class Receiver(threading.Thread):
                         if self.running:
                             try:
                             #    message {"sender":"Me","reciever":"g5mlo4lohqjpm5tf","textValue":"my stupid child","textType":"Status"}
-                                print line.split(' ')[1]
+                                print line.split('message ')[1]
                                 d = json.loads(line.split('message ')[1])
                                 print d['textType']
                                 print d['textValue']
-                                if (d['textValue'] == 'Status'):
+
+                                if (d['textType'] == 'SimpleMessage'):
                                     file = open('statusUpdates.txt', "a")
-                                    file.write(d['reciever'] + "" + d['textValue'] +"\r\n")
+                                    file.write(d['textValue'] + "\r\n")
+
+                                if (d['textType'] == 'Status'):
+                                    file = open(d['sender'] + '.txt', "a")
+                                    file.write(d['textValue'] + "\r\n")
 
                                 #On recieving an Add Friend
-                                if (d['textValue'] == 'AddFriend'):
+                                if (d['textType'] == 'AddFriend'):
                                     file = open('buddy-list.txt', "a")
                                     file.write("\r\n" + d['sender'] + " " + d['textValue'])
-                                    file = open(d['sender'] + '_offline.txt', "a")
-                                    file.write('{"sender":"' + d['reciever'] + ' ","reciever":"' + d['sender'] + '","textValue":"!PINGBACKPROTOCOL!","textType":"ReturnFriend"}')
+                                #   file = open(d['sender'] + '_offline.txt', "a")
+                                #   file.write('{"sender":"' + d['reciever'] + ' ","reciever":"' + d['sender'] + '","textValue":"!PINGBACKPROTOCOL!","textType":"ReturnFriend"}')
 
-                                if (d['textValue'] == 'ReturnFriend'):
+                                if (d['textType'] == 'ReturnFriend'):
                                     pass
                                     #Get value of who this is returning from and delete it if it's in the list
 
