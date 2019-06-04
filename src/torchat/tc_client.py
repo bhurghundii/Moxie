@@ -407,12 +407,10 @@ class Buddy(object):
                             name = u""
                         buddy = Buddy(address, self.bl, name)
                         self.bl.addBuddy(buddy)
-                        print 'Pinging ' + address
-                    #    buddy.sendAddMe()
-                        buddy.storeOfflineChatMessage('Test')
+                        #self.buddy.sendPing()
+                        buddy.storeOfflineChatMessage('Test from Alice')
 
             i = i + 1
-
 
     def returnPingsFromNewFriends(self):
         file = open('aknowledgeFriend.txt', "r")
@@ -1934,7 +1932,6 @@ class Receiver(threading.Thread):
                     for line in temp:
 
                         if self.running:
-                            print line
                             try:
                             #    message {"sender":"Me","reciever":"g5mlo4lohqjpm5tf","textValue":"my stupid child","textType":"Status"}
                                 print line.split(' ')[1]

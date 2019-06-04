@@ -290,6 +290,7 @@ function addFriendManually() {
     el.style.visibility = 'visible';
   }
 }
+}
 
 
 mainPageStart();
