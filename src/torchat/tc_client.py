@@ -288,12 +288,10 @@ class Buddy(object):
         if self.name == "" and name <> "":
             self.name = name
             self.bl.save()
-        self.bl.gui(CB_TYPE_PROFILE, self)
 
     def onProfileText(self, text):
         print "(2) %s.onProfile" % self.address
         self.profile_text = text
-        self.bl.gui(CB_TYPE_PROFILE, self)
 
     def onAvatarDataAlpha(self, data):
         print "(2) %s.onAvatarDataAplha()" % self.address
@@ -305,10 +303,9 @@ class Buddy(object):
         print "(2) %s.onAvatarData()" % self.address
         if data <> self.profile_avatar_data:
             self.profile_avatar_data = data
-            self.bl.gui(CB_TYPE_AVATAR, self)
 
     def onChatMessage(self, message):
-        self.bl.gui(CB_TYPE_CHAT, (self, message))
+        pass
 
     def sendChatMessage(self, text):
         #text must be unicode, will be encoded to UTF-8
@@ -326,9 +323,6 @@ class Buddy(object):
         #Reading the send buffer which basically is the message bridge between Torchat and Moxie
         print 'Looping over the mainMessageFunction'
         file = open('AddBuffer.txt', "a")
-        file.close()
-
-        file = open('aknowledgeFriend.txt', "a")
         file.close()
 
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "r")
@@ -353,7 +347,7 @@ class Buddy(object):
                     d = json.loads(s)
 
                     #Check if it's a request to add a friend
-
+                    #TODO: BUILD HASH MAP FOR COUNTER MESSAGES
                     if d['textType'] == 'AddFriend':
                         print 'Got an AddFriend'
                         file = open('AddBuffer.txt', "a")
@@ -1080,7 +1074,6 @@ class FileReceiver(object):
         #the following will result in a call into the GUI
         #the GUI will then give us a callback function
         print "(2) FileReceiver: notifying GUI about new file transfer"
-        self.buddy.bl.gui(CB_TYPE_FILE, self)
 
         #we cannot receive without a GUI (or other piece of code
         #that provides the callback) because this other code
@@ -1946,7 +1939,7 @@ class Receiver(threading.Thread):
                                 print d['textValue']
 
                                 if (d['textType'] == 'SimpleMessage'):
-                                    file = open('statusUpdates.txt', "a")
+                                    file = open(d['sender'] + '.txt', "a")
                                     file.write(d['textValue'] + "\r\n")
 
                                 if (d['textType'] == 'Status'):
