@@ -328,8 +328,6 @@ class Buddy(object):
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
-
-        print buffer
         #Clearing out the sendbuffer
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "w")
         file.write("")
@@ -343,7 +341,6 @@ class Buddy(object):
                 try:
                     #Break each line
                     s = buffer.split('\n')[i]
-                    print s
                     d = json.loads(s)
 
                     #Check if it's a request to add a friend
@@ -356,13 +353,11 @@ class Buddy(object):
                     if d['textType'] == 'SimpleMessage':
                         file = open(d['reciever'] + '_offline.txt', "a")
                         file.write(s)
-                        print s
                         file.close()
 
                     if d['textType'] == 'Status':
                         file = open('statusUpdates.txt', "a")
                         file.write(s)
-                        print s
                         file.close()
 
                 except:
@@ -408,15 +403,12 @@ class Buddy(object):
                         buddy = Buddy(address, self.bl, name)
                         self.bl.addBuddy(buddy)
                         #self.buddy.sendPing()
-                        buddy.storeOfflineChatMessage('Test from Alice')
+                    #    buddy.storeOfflineChatMessage('Test from Alice')
 
             i = i + 1
 
     def returnPingsFromNewFriends(self):
-        file = open('aknowledgeFriend.txt', "r")
-        buffer = file.read()
-        bufferline = len(buffer.split('\n'))
-        print buffer
+        pass
 
 
 
