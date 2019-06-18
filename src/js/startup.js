@@ -16,6 +16,13 @@ window.onload = function() {
       console.log("It's saved!");
     });
 
+    fs.writeFile('torchat/buddy-chatProperties.txt', '', {
+      flag: 'wx'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
+
   }
 
   if (isReleaseBuild() == 1) {

@@ -21,6 +21,9 @@ print 'Cleaning TorChat'
 if os.path.isfile("torchat/torchat.ini"):
     os.remove("torchat/torchat.ini")
 
+if os.path.isfile("torchat/buddy-chatProperties.txt"):
+    os.remove("torchat/buddy-chatProperties.txt")
+
 if os.path.isfile("torchat/buddy-list.txt"):
     os.remove("torchat/buddy-list.txt")
 

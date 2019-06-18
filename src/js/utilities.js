@@ -69,6 +69,28 @@ function resetMoxie() {
   });
 }
 
+function getID() {
+  file = "me.info";
+  var fs = require('fs');
+  fs.readFile(file, 'utf8', function(err, data) {
+    if (err) {
+      return console.log(err);
+    }
+    return data.split(' ')[0];
+  });
+}
+
+function getName() {
+  file = "me.info";
+  var fs = require('fs');
+  fs.readFile(file, 'utf8', function(err, data) {
+    if (err) {
+      return console.log(err);
+    }
+    return data.split(' ')[1];
+  });
+}
+
 //This was the old kill command. Only works on systems which support bash
 //Kills torchat
 function executeKILLSig() {

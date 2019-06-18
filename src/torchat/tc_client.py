@@ -31,6 +31,7 @@ import hashlib
 import config
 import version
 import json
+import ast
 
 TORCHAT_PORT = 11009 #do NOT change this.
 TOR_CONFIG = "tor" #the name of the active section in the .ini file
@@ -319,7 +320,8 @@ class Buddy(object):
         #EXAMPLE {"sender":"Me","reciever":"oamdv7xq7k5stmg2","textValue":"aag","textType":"SimpleMessage"}
 
         #message {"sender":"Me","reciever":"c2w5qyr77ivhhiar","textValue":"!PINGBACKPROTOCOL!","textType":"AddFriend"}
-
+        buddyPropHash = BuddyHashProperties()
+        buddyPropHash.updateHashBuddies()
         #Reading the send buffer which basically is the message bridge between Torchat and Moxie
         print 'Looping over the mainMessageFunction'
         file = open('AddBuffer.txt', "a")
@@ -341,8 +343,9 @@ class Buddy(object):
                 try:
                     #Break each line
                     s = buffer.split('\n')[i]
+                    print s
                     d = json.loads(s)
-
+                    print d
                     #Check if it's a request to add a friend
                     #TODO: BUILD HASH MAP FOR COUNTER MESSAGES
                     if d['textType'] == 'AddFriend':
@@ -351,6 +354,7 @@ class Buddy(object):
                         file.write(d['reciever'] + ' ' + d['recieverName'])
 
                     if d['textType'] == 'SimpleMessage':
+                        print d['reciever']
                         file = open(d['reciever'] + '_offline.txt', "a")
                         file.write(s)
                         file.close()
@@ -367,20 +371,19 @@ class Buddy(object):
             i = i + 1
 
         self.sendPingsToNewFriends()
-        self.returnPingsFromNewFriends()
         self.sendOfflineMessages()
 
 
+
     def sendPingsToNewFriends(self):
-        file = open('AddBuffer.txt', "r")
+        file = open('buddy-list.txt', "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
         i = 0
 
         while (i < bufferline and buffer):
             if self.isFullyConnected():
-                s = buffer.split('\n')[i]
-                print s
+
 
                 self.list = []
                 filename = os.path.join(config.getDataDir(), "buddy-list.txt")
@@ -406,10 +409,6 @@ class Buddy(object):
                     #    buddy.storeOfflineChatMessage('Test from Alice')
 
             i = i + 1
-
-    def returnPingsFromNewFriends(self):
-        pass
-
 
 
 
@@ -445,7 +444,6 @@ class Buddy(object):
                 #a pong before, the receiver will have set the status to online.
                 #text is unicode, so we must encode it to UTF-8 again.
                 message = ProtocolMsg_message(self, text.encode("UTF-8"))
-                print "NOW SENDING"
                 message.send()
             else:
                 print "(2) could not send offline messages, not fully connected."
@@ -541,17 +539,14 @@ class Buddy(object):
 
     def sendStatus(self):
         if self.isAlreadyPonged():
+            f = open('torchatready.txt',"w")
+            f.write('Ready')
+            f.close()
             status = ""
             if self.bl.own_status == STATUS_ONLINE:
                 status = "available"
-		f = open('torchatready.txt',"w")
-		f.write('Ready')
-		f.close()
             if self.bl.own_status == STATUS_AWAY:
                 status = "away"
-		f = open('torchatready.txt',"w")
-		f.write('Not Ready')
-		f.close()
             if self.bl.own_status == STATUS_XA:
                 status = "xa"
             if status != "":
@@ -560,6 +555,9 @@ class Buddy(object):
                 msg.send()
         else:
             print "(2) %s.sendStatus(): not connected, not sending" % self.address
+            f = open('torchatready.txt',"w")
+            f.write('Not Ready')
+            f.close()
 
     def sendProfile(self):
         if self.isAlreadyPonged():
@@ -600,7 +598,6 @@ class Buddy(object):
 
 
     def sendAddMe(self):
-        print 'pinged address'
         if self.isAlreadyPonged():
             msg = ProtocolMsg_add_me(self)
             msg.send()
@@ -630,6 +627,73 @@ class Buddy(object):
             line = self.address
         return line
 
+#This is designed to save how many chats are made and potentially any other info for security reasons
+#Locally stored ofc
+class BuddyHashProperties:
+    def __init__(self):
+        if (self.is_non_zero_file('buddy-chatProperties.txt') == False):
+            self.initPropertiesHash()
+
+    def is_non_zero_file(self, fpath):
+        return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
+
+    def initPropertiesHash(self):
+        data = dict()
+        file = open('buddy-list.txt', "r")
+        buffer = file.read()
+        #d['mynewkey'] = 'mynewvalue'
+        for i in range(0, len(buffer.split('\n')) - 1):
+            data[buffer.split('\n')[i].split(' ')[0]] = 0
+        file = open('buddy-chatProperties.txt', "w")
+        file.write(str(data))
+
+    def updateHashBuddies(self):
+        newdata = dict()
+        file = open('buddy-list.txt', "r")
+        buffer = file.read()
+        b_len = 0
+        for i in range(0, len(buffer.split('\n')) - 1):
+            newdata[buffer.split('\n')[i].split(' ')[0]] = 0
+            b_len = i
+        print newdata
+
+        olddata = self.getHash()
+        print olddata
+
+        for key in newdata:
+            print key
+            if key in olddata:
+                pass
+            else:
+                olddata[key] = 0
+                print olddata
+
+        file = open('buddy-chatProperties.txt', "w")
+        file.write(str(olddata))
+
+    def incHash(self, id):
+        print 'Incrementing ' + id
+        data = dict()
+        file = open('buddy-chatProperties.txt', "r")
+        data = ast.literal_eval(file.read())
+        data[id] = data[id] + 1
+        file = open('buddy-chatProperties.txt', "w")
+        file.write(str(data))
+
+    def getHash(self):
+        data = dict()
+        file = open('buddy-chatProperties.txt', "r")
+        data = ast.literal_eval(file.read())
+        return data
+
+    def getHashID(self, id):
+        try:
+            data = dict()
+            file = open('buddy-chatProperties.txt', "r")
+            data = ast.literal_eval(file.read())
+            return data[id]
+        except:
+            return -1
 
 
 class BuddyList(object):
@@ -1472,7 +1536,6 @@ class ProtocolMsg_ping(ProtocolMsg):
         self.buddy.sendProfile()
         self.buddy.sendAvatar()
         if self.buddy in self.bl.list:
-        #    print 'DOES THIS WORK' + self.address
             self.buddy.sendAddMe()
 
         #send status as the last message because the other
@@ -1932,7 +1995,7 @@ class Receiver(threading.Thread):
 
                                 if (d['textType'] == 'SimpleMessage'):
                                     file = open(d['sender'] + '.txt', "a")
-                                    file.write(d['textValue'] + "\r\n")
+                                    file.write(d['sender'] + ':' + d['textValue'] + "\r\n")
 
                                 if (d['textType'] == 'Status'):
                                     file = open(d['sender'] + '.txt', "a")
@@ -2053,6 +2116,9 @@ class OutConnection(threading.Thread):
             while self.running:
                 while len(self.send_buffer) > 0:
                     text = self.send_buffer.pop(0)
+
+                    #BEFORE WE SEND, WE CHECK WHETHER THE ID HAS ENDED AND WE SHOULD SEND IT!
+                    '''
                     try:
                         print "(2) %s out-connection sending buffer" % self.address
                         self.socket.send(text)
@@ -2060,6 +2126,35 @@ class OutConnection(threading.Thread):
                         print "(2) out-connection send error"
                         self.bl.onErrorOut(self)
                         self.close()
+                    '''
+                    try:
+                        d = json.loads(text.split('message ')[1])
+                        if (d['textType'] == 'SimpleMessage'):
+                            buddyPropHash = BuddyHashProperties()
+                            chatidout = buddyPropHash.getHashID(d['reciever'])
+                            print 'DEBUG: COMPARING ' + str(chatidout) + ' AND ' + str(int(d['chatID'])) + ' ON ' + str(d)
+                            if ((int(d['chatID'])) >= int(chatidout)):
+                                try:
+                                    print 'Comparision done, sending'
+                                    print "(2) %s out-connection sending buffer" % self.address
+                                    self.socket.send(text)
+                                    buddyPropHash.incHash(d['reciever'])
+
+                                except:
+                                    print "(2) out-connection send error"
+                                    self.bl.onErrorOut(self)
+                                    self.close()
+
+                    except Exception as e:
+                        print e
+                        try:
+                            print "(2) %s out-connection sending buffer" % self.address
+                            self.socket.send(text)
+                        except:
+                            print "(2) out-connection send error"
+                            self.bl.onErrorOut(self)
+                            self.close()
+
                 time.sleep(0.2)
 
         except:

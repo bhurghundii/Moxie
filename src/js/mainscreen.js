@@ -264,6 +264,7 @@ function addFriendManually() {
       obj.recieverName = name;
       obj.textValue = '!PINGBACKPROTOCOL';
       obj.textType = "AddFriend";
+
       var jsonString = JSON.stringify(obj);
 
       console.log(jsonString);
