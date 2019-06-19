@@ -370,7 +370,7 @@ class Buddy(object):
                 sansText += textToSend
             i = i + 1
 
-        self.sendPingsToNewFriends()
+        #self.sendPingsToNewFriends()
         self.sendOfflineMessages()
 
 
@@ -1994,8 +1994,12 @@ class Receiver(threading.Thread):
                                 print d['textValue']
 
                                 if (d['textType'] == 'SimpleMessage'):
-                                    file = open(d['sender'] + '.txt', "a")
-                                    file.write(d['sender'] + ':' + d['textValue'] + "\r\n")
+
+                                    currentsession = tuple(open(d['sender'] + '.txt', 'r'))
+                                    print currentsession
+                                    if (d['sender'] + ':' + d['textValue']) not in currentsession:
+                                        file = open(d['sender'] + '.txt', "a")
+                                        file.write(d['sender'] + ':' + d['textValue'] + "\r\n")
 
                                 if (d['textType'] == 'Status'):
                                     file = open(d['sender'] + '.txt', "a")
@@ -2118,28 +2122,23 @@ class OutConnection(threading.Thread):
                     text = self.send_buffer.pop(0)
 
                     #BEFORE WE SEND, WE CHECK WHETHER THE ID HAS ENDED AND WE SHOULD SEND IT!
-                    '''
-                    try:
-                        print "(2) %s out-connection sending buffer" % self.address
-                        self.socket.send(text)
-                    except:
-                        print "(2) out-connection send error"
-                        self.bl.onErrorOut(self)
-                        self.close()
-                    '''
+                    print 'SENDING2 TO ' + text
+
+
                     try:
                         d = json.loads(text.split('message ')[1])
+                        print d['textType']
+                        print d['chatID']
                         if (d['textType'] == 'SimpleMessage'):
-                            buddyPropHash = BuddyHashProperties()
-                            chatidout = buddyPropHash.getHashID(d['reciever'])
-                            print 'DEBUG: COMPARING ' + str(chatidout) + ' AND ' + str(int(d['chatID'])) + ' ON ' + str(d)
-                            if ((int(d['chatID'])) >= int(chatidout)):
+                            currentsession = tuple(open('currentSession.txt', 'r'))
+                            print currentsession
+                            if text not in currentsession:
                                 try:
                                     print 'Comparision done, sending'
                                     print "(2) %s out-connection sending buffer" % self.address
                                     self.socket.send(text)
-                                    buddyPropHash.incHash(d['reciever'])
-
+                                    file = open('currentSession.txt', "a")
+                                    file.write(text)
                                 except:
                                     print "(2) out-connection send error"
                                     self.bl.onErrorOut(self)

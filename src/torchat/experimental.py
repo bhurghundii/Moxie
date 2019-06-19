@@ -72,13 +72,14 @@ text = '{"sender":"c5bi537lv2oypooy","reciever":"c5bi537lv2oypooy","textValue":"
 #try:
 d = json.loads(text)
 if (d['textType'] == 'SimpleMessage'):
-    x = BuddyHashProperties()
-    print d['textType']
-    print int(d['chatID'])
-    print x.getHashID(d['reciever'])
-    if (int(d['chatID']) >= x.getHashID(d['reciever'])):
+    currentsession = tuple(open('currentSession.txt', 'r'))
+    print currentsession
+    if text not in currentsession:
         try:
             print "(2) out-connection sending buffer"
+            file = open('currentSession.txt', "a")
+            file.write(text)
+            
         except:
             print "(2) out-connection send error"
 

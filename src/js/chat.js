@@ -110,10 +110,23 @@ function getDateTime() {
 
 }
 
+function deleteDuplicatesFromArray(sc){
+  let l = sc.length, r = [], seen = new Set()
+  outer:
+    for (let i = 0; i < l; i++){
+      let v = sc[i];
+      if (seen.has(v)) continue outer;
+      seen.add(v)
+      r.push(v)
+    }
+    return r
+}
+
 function other() {
   const fs = require('fs');
   if (isReleaseBuild() == 0) {
     var data = fs.readFileSync('torchat/' + localStorage.friendChat.split(' ')[0] + '.txt', 'utf8')
+    cleaneddata = deleteDuplicatesFromArray(data.split('\n'))
   }
   if (isReleaseBuild() == 1) {
     var data = fs.readFileSync('torchat/dist/torchat/' + localStorage.friendChat.split(' ')[0] + '.txt', 'utf8')
@@ -125,18 +138,19 @@ function other() {
 
   var index = 0;
   var chat = document.getElementById("chat")
+  data = cleaneddata
   chat.innerHTML = ""
-  for (i = 0; i < data.split('\n').length; i++) {
-    if (data.split('\n')[i] != "") {
-      console.log(data.split('\n')[i])
+  for (i = 0; i < cleaneddata.length; i++) {
+    if (cleaneddata[i] != "") {
+      console.log(cleaneddata[i])
 
-      if (data.split('\n')[i].split(':')[0] != "You") {
+      if (cleaneddata[i].split(':')[0] != "You") {
         var chat = document.getElementById("chat")
-        chat.innerHTML += '<li class="other"> <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div> <div class="msg"> <p>' + localStorage.friendChat.split(' ')[1] + '</p> <p>' + data.split('\n')[i].split(':')[
+        chat.innerHTML += '<li class="other"> <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div> <div class="msg"> <p>' + localStorage.friendChat.split(' ')[1] + '</p> <p>' + cleaneddata[i].split(':')[
           1] + '</p> <time>20:17</time> </div> </li>'
       } else {
         var chat = document.getElementById("chat")
-        chat.innerHTML += '<li class="self"> <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div> <div class="msg"> <p>You</p> <p>' + data.split('\n')[i].split(':')[1] + '</p> <time>20:17</time> </div> </li>'
+        chat.innerHTML += '<li class="self"> <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div> <div class="msg"> <p>You</p> <p>' + cleaneddata[i].split(':')[1] + '</p> <time>20:17</time> </div> </li>'
       }
     }
   }
