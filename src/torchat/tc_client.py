@@ -370,7 +370,7 @@ class Buddy(object):
                 sansText += textToSend
             i = i + 1
 
-        #self.sendPingsToNewFriends()
+        self.sendPingsToNewFriends()
         self.sendOfflineMessages()
 
 
@@ -383,8 +383,6 @@ class Buddy(object):
 
         while (i < bufferline and buffer):
             if self.isFullyConnected():
-
-
                 self.list = []
                 filename = os.path.join(config.getDataDir(), "buddy-list.txt")
 
@@ -1607,7 +1605,6 @@ class ProtocolMsg_version(ProtocolMsg):
             print "(2) %s has version %s" % (self.buddy.address, self.version)
             self.buddy.version = self.version
 
-
 class ProtocolMsg_status(ProtocolMsg):
     """transmit the status, this MUST be sent every 120 seconds
     or the client may trigger a timeout and close the conection.
@@ -1640,7 +1637,6 @@ class ProtocolMsg_status(ProtocolMsg):
             #This function handles all the message sending
             self.buddy.mainMessageFunction()
             #avoid timeout of in-connection
-
             self.connection.last_active = time.time()
 
 
