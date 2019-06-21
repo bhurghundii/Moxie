@@ -351,7 +351,7 @@ class Buddy(object):
                     if d['textType'] == 'AddFriend':
                         print 'Got an AddFriend'
                         file = open('AddBuffer.txt', "a")
-                        file.write(d['reciever'] + ' ' + d['recieverName'])
+                        file.write(d['reciever'] + ' ' + d['recieverName'] + '\n')
 
                     if d['textType'] == 'SimpleMessage':
                         #Write to your own copy first
@@ -390,43 +390,36 @@ class Buddy(object):
                 sansText += textToSend
             i = i + 1
 
-        #self.sendPingsToNewFriends()
+        self.sendPingsToNewFriends()
         self.sendOfflineMessages2()
 
 
 
     def sendPingsToNewFriends(self):
-        file = open('buddy-list.txt', "r")
+        file = open('AddBuffer.txt', "r")
         buffer = file.read()
-        bufferline = len(buffer.split('\n'))
+
+        bufferline = buffer.split('\n')
         i = 0
 
-        while (i < bufferline and buffer):
+        while (i < len(bufferline) and buffer):
             if self.isFullyConnected():
                 self.list = []
-                filename = os.path.join(config.getDataDir(), "buddy-list.txt")
+                line = bufferline[i]
+                if len(line) > 15:
+                    address = line[0:16]
+                    if len(line) > 17:
+                        name = line[17:]
+                    else:
+                        name = u""
 
-                #create empty buddy list file if it does not already exist
-                f = open(filename, "a")
-                f.close()
-
-                f = open(filename, "r")
-                l = f.read().replace("\r", "\n").replace("\n\n", "\n").split("\n")
-                f.close
-                for line in l:
-                    line = line.rstrip().decode("UTF-8")
-                    if len(line) > 15:
-                        address = line[0:16]
-                        if len(line) > 17:
-                            name = line[17:]
-                        else:
-                            name = u""
-                        buddy = Buddy(address, self.bl, name)
-                        self.bl.addBuddy(buddy)
-                        #self.buddy.sendPing()
-                    #    buddy.storeOfflineChatMessage('Test from Alice')
+                buddy = Buddy(address, self.bl, name)
+                self.bl.addBuddy(buddy)
 
             i = i + 1
+        print 'Done adding friends!'
+        file = open('AddBuffer.txt', "w")
+        file.write('')
 
 
 
@@ -2188,7 +2181,7 @@ class OutConnection(threading.Thread):
                             self.bl.onErrorOut(self)
                             self.close()
 
-                time.sleep(3)
+                time.sleep(0.2)
 
         except:
             print "(2) out-connection to %s failed: %s" % (self.address, sys.exc_info()[1])
