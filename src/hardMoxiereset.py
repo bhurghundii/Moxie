@@ -2,7 +2,12 @@ import os
 import shutil
 
 #Reset TorCHAT and Moxie
-
+def removeChatLogs(directory):
+    directoryFiles =  os.listdir(directory)
+    for file in directoryFiles:
+        if (len(file[:-4]) == 16 and file[-4:] == '.txt'):
+            os.remove(directory +'/' + file)
+            
 print 'Cleaning MOXIE'
 if os.path.isfile("me.info"):
     os.remove("me.info")
@@ -50,10 +55,3 @@ except:
 if os.path.isfile("torchat/statusUpdates.txt"):
     os.remove("torchat/statusUpdates.txt")
     open("torchat/statusUpdates.txt", 'a').close()
-
-def removeChatLogs(directory):
-    directoryFiles =  os.listdir(directory)
-
-    for file in directoryFiles:
-        if (len(file[:-4]) == 16 and file[-4:] == '.txt'):
-            os.remove(directory +'/' + file)

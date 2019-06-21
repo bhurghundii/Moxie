@@ -390,7 +390,7 @@ class Buddy(object):
                 sansText += textToSend
             i = i + 1
 
-        self.sendPingsToNewFriends()
+        #self.sendPingsToNewFriends()
         self.sendOfflineMessages2()
 
 
@@ -2159,7 +2159,7 @@ class OutConnection(threading.Thread):
                     text = self.send_buffer.pop(0)
 
                     #BEFORE WE SEND, WE CHECK WHETHER THE ID HAS ENDED AND WE SHOULD SEND IT!
-                    #print 'SENDING2 TO ' + text
+                    print 'SENDING2: ' + text + ' to ' + self.address
 
 
                     try:
@@ -2188,7 +2188,7 @@ class OutConnection(threading.Thread):
                             self.bl.onErrorOut(self)
                             self.close()
 
-                time.sleep(0.2)
+                time.sleep(3)
 
         except:
             print "(2) out-connection to %s failed: %s" % (self.address, sys.exc_info()[1])
