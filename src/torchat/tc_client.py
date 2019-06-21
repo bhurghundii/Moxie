@@ -353,6 +353,9 @@ class Buddy(object):
                         file = open('AddBuffer.txt', "a")
                         file.write(d['reciever'] + ' ' + d['recieverName'] + '\n')
 
+                        file = open('buddy-list.txt', "a")
+                        file.write(d['reciever'] + ' ' + d['recieverName'] + '\n')
+
                     if d['textType'] == 'SimpleMessage':
                         #Write to your own copy first
                         file = open(d['reciever'] + '.txt', "a")
