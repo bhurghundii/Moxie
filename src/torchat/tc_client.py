@@ -390,7 +390,7 @@ class Buddy(object):
                 sansText += textToSend
             i = i + 1
 
-        #self.sendPingsToNewFriends()
+        self.sendPingsToNewFriends()
         self.sendOfflineMessages2()
 
 
