@@ -354,15 +354,35 @@ class Buddy(object):
                         file.write(d['reciever'] + ' ' + d['recieverName'])
 
                     if d['textType'] == 'SimpleMessage':
-                        print d['reciever']
+                        #Write to your own copy first
+                        file = open(d['reciever'] + '.txt', "a")
+                        file.write('You:' + d['textValue'] + '\r\n')
+                        #Log it onto the offline so it will send to the sender
                         file = open(d['reciever'] + '_offline.txt', "a")
-                        file.write(s)
+                        file.write(s + '\r\n')
                         file.close()
 
                     if d['textType'] == 'Status':
-                        file = open('statusUpdates.txt', "a")
-                        file.write(s)
-                        file.close()
+                        #Put it on the offline of EVERYONES
+                        filename = os.path.join(config.getDataDir(), "buddy-list.txt")
+
+                        #create empty buddy list file if it does not already exist
+                        f = open(filename, "a")
+                        f.close()
+
+                        f = open(filename, "r")
+                        l = f.read().replace("\r", "\n").replace("\n\n", "\n").split("\n")
+                        f.close
+                        for line in l:
+                            line = line.rstrip().decode("UTF-8")
+                            if len(line) > 15:
+                                address = line[0:16]
+                                if len(line) > 17:
+                                    name = line[17:]
+                                else:
+                                    name = u""
+                                file = open(address + '_offline.txt', "a")
+                                file.write(s + '\r\n')
 
                 except:
                     print 'Nothing to decode here...'
@@ -370,8 +390,8 @@ class Buddy(object):
                 sansText += textToSend
             i = i + 1
 
-        self.sendPingsToNewFriends()
-        self.sendOfflineMessages()
+        #self.sendPingsToNewFriends()
+        self.sendOfflineMessages2()
 
 
 
@@ -443,6 +463,26 @@ class Buddy(object):
                 #text is unicode, so we must encode it to UTF-8 again.
                 message = ProtocolMsg_message(self, text.encode("UTF-8"))
                 message.send()
+            else:
+                print "(2) could not send offline messages, not fully connected."
+                pass
+
+    def sendOfflineMessages2(self):
+        #this will be called in the incoming status message
+        #FIXME: call this from onStatus() instead, this would be the ntural place for it
+        text = self.getOfflineMessages()
+        if text:
+            if self.isFullyConnected():
+
+                wipeFile(self.getOfflineFileName())
+                for i in range(len(text.split('\n'))):
+                    sending = text.split('\n')[i]
+                    print " sending offline messages to %s" % self.address
+                    #we send it without checking online status. because we have sent
+                    #a pong before, the receiver will have set the status to online.
+                    #text is unicode, so we must encode it to UTF-8 again.
+                    message = ProtocolMsg_message(self, sending.encode("UTF-8"))
+                    message.send()
             else:
                 print "(2) could not send offline messages, not fully connected."
                 pass
@@ -1982,6 +2022,7 @@ class Receiver(threading.Thread):
                     for line in temp:
 
                         if self.running:
+                            print 'RECIEVED: ' + line
                             try:
                             #    message {"sender":"Me","reciever":"g5mlo4lohqjpm5tf","textValue":"my stupid child","textType":"Status"}
                                 print line.split('message ')[1]
@@ -1998,8 +2039,8 @@ class Receiver(threading.Thread):
                                         file.write(d['sender'] + ':' + d['textValue'] + "\r\n")
 
                                 if (d['textType'] == 'Status'):
-                                    file = open(d['sender'] + '.txt', "a")
-                                    file.write(d['textValue'] + "\r\n")
+                                    file = open('statusUpdates.txt', "a")
+                                    file.write(d['sender'] + '#' + d['textValue'] + "\r\n")
 
                                 #On recieving an Add Friend
                                 if (d['textType'] == 'AddFriend'):
@@ -2118,14 +2159,12 @@ class OutConnection(threading.Thread):
                     text = self.send_buffer.pop(0)
 
                     #BEFORE WE SEND, WE CHECK WHETHER THE ID HAS ENDED AND WE SHOULD SEND IT!
-                    print 'SENDING2 TO ' + text
+                    #print 'SENDING2 TO ' + text
 
 
                     try:
                         d = json.loads(text.split('message ')[1])
-                        print d['textType']
-                        print d['chatID']
-                        if (d['textType'] == 'SimpleMessage'):
+                        if (d['textType'] == 'SimpleMessage' or d['textType'] == 'Status'):
                             currentsession = tuple(open('currentSession.txt', 'r'))
                             print currentsession
                             if text not in currentsession:
@@ -2141,7 +2180,6 @@ class OutConnection(threading.Thread):
                                     self.close()
 
                     except Exception as e:
-                        print e
                         try:
                             print "(2) %s out-connection sending buffer" % self.address
                             self.socket.send(text)

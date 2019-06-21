@@ -19,7 +19,7 @@ function isReleaseBuild() {
   var isRelease = 0
   try {
     data = fs.readFileSync('MoxieFlags.config', 'utf8');
-    console.log(data.toString());
+  //  console.log(data.toString());
     if (data.indexOf('1') > 0) {
       isRelease = 1;
     }

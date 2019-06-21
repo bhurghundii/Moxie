@@ -29,23 +29,17 @@ function mainPageStart() {
 function getID() {
   file = "me.info";
   var fs = require('fs');
-  fs.readFile(file, 'utf8', function(err, data) {
-    if (err) {
-      return console.log(err);
-    }
-    return data.split(' ')[0];
-  });
+  idstring = ''
+  var data = fs.readFileSync(file);
+  return data.toString().split(' ')[1]
 }
 
 function getName() {
   file = "me.info";
   var fs = require('fs');
-  fs.readFile(file, 'utf8', function(err, data) {
-    if (err) {
-      return console.log(err);
-    }
-    return data.split(' ')[1];
-  });
+  idstring = ''
+  var data = fs.readFileSync(file);
+  return data.toString().split(' ')[0]
 }
 
 function sendStatusUpdate() {

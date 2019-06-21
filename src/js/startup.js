@@ -9,6 +9,14 @@ window.onload = function() {
       console.log("It's saved!");
     });
 
+    fs.writeFile('torchat/currentSession.txt', '', {
+      flag: 'w'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
+
+
     fs.writeFile('torchat/statusUpdates.txt', '', {
       flag: 'wx'
     }, function(err) {
