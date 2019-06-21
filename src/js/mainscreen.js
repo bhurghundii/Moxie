@@ -18,6 +18,7 @@ function mainPageStart() {
     input: fs.createReadStream(file)
   });
   var chat = document.getElementById("leftMenu")
+    chat.innerHTML = ''
   rl.on('line', (line) => {
     console.log(`Line from file: ${line}`);
     chat.innerHTML += '<div onclick="localStorage.friendChat = &quot;' + line + '&quot;;" > <a href="chat.html" class="w3-bar-item w3-button"> <img class="img-circle" src="http://www.imran.com/xyper_images/icon-user-default.png"> ' + line

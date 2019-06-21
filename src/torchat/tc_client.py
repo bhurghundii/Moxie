@@ -2035,8 +2035,11 @@ class Receiver(threading.Thread):
                                         file.write(d['sender'] + ':' + d['textValue'] + "\r\n")
 
                                 if (d['textType'] == 'Status'):
-                                    file = open('statusUpdates.txt', "a")
-                                    file.write(d['sender'] + '#' + d['textValue'] + "\r\n")
+                                    currentsession = tuple(open('statusUpdates.txt', 'r'))
+                                    print currentsession
+                                    if (d['sender'] + ':' + d['textValue']) not in currentsession:
+                                        file = open('statusUpdates.txt', "a")
+                                        file.write(d['sender'] + '#' + d['textValue'] + "\r\n")
 
                                 #On recieving an Add Friend
                                 if (d['textType'] == 'AddFriend'):
