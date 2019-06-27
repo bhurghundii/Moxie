@@ -14,24 +14,61 @@ function getName() {
   return data.toString().split(' ')[0]
 }
 
+function base64EncodeUnicode(str) {
+  // UTF8->RAW->B64
+  utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+    return String.fromCharCode('0x' + p1);
+  });
+
+  return btoa(utf8Bytes);
+}
+
+function base64DecodeUnicode(str) {
+  utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+    return String.fromCharCode('0x' + p1);
+  });
+
+  return btoa(utf8Bytes);
+}
+
 function getChatID(SendToID) {
   var fs = require('fs');
   var data = fs.readFileSync('torchat/buddy-chatProperties.txt');
-  return data.toString().split("'" + SendToID +"':")[1].split("}")[0]
+  return data.toString().split("'" + SendToID + "':")[1].split("}")[0]
 }
+
 var chat = document.getElementById("buddyname")
 chat.innerHTML += localStorage.friendChat.split(' ')[1]
 
 const fs = require("fs"); // Or `import fs from "fs";` with ESM
-if (fs.existsSync('torchat/' + localStorage.friendChat.split(' ')[0] + '.txt') == false) {
-  fs.writeFile('torchat/' + localStorage.friendChat.split(' ')[0] + '.txt', "", function(err) {
-    if (err) {
-      return console.log(err);
-    }
-
-    console.log("The file was created!");
-  });
+if (isReleaseBuild() == 0) {
+  if (fs.existsSync('torchat/' + localStorage.friendChat.split(' ')[0] + '.txt') == false) {
+    fs.writeFile('torchat/' + localStorage.friendChat.split(' ')[0] + '.txt', "", function(err) {
+      if (err) {
+        return console.log(err);
+      }
+    });
+  }
 }
+if (isReleaseBuild() == 1) {
+  if (fs.existsSync('torchat/dist/torchat/' + localStorage.friendChat.split(' ')[0] + '.txt') == false) {
+    fs.writeFile('torchat/dist/torchat/' + localStorage.friendChat.split(' ')[0] + '.txt', "", function(err) {
+      if (err) {
+        return console.log(err);
+      }
+    });
+  }
+}
+if (isReleaseBuild() == 2) {
+  if (fs.existsSync('torchat/dist/' + localStorage.friendChat.split(' ')[0] + '.txt') == false) {
+    fs.writeFile('torchat/dist/' + localStorage.friendChat.split(' ')[0] + '.txt', "", function(err) {
+      if (err) {
+        return console.log(err);
+      }
+    });
+  }
+}
+
 
 function sendText() {
   if (isReleaseBuild() == 0) {
@@ -42,7 +79,7 @@ function sendText() {
     var obj = new Object();
     obj.sender = getID();
     obj.reciever = localStorage.friendChat.split(' ')[0];
-    obj.textValue = textToSend;
+    obj.textValue = ((new Date() / 1000)) + "-" + textToSend;
     obj.textType = "SimpleMessage";
     obj.chatID = getChatID(localStorage.friendChat.split(' ')[0]);
 
@@ -110,16 +147,18 @@ function getDateTime() {
 
 }
 
-function deleteDuplicatesFromArray(sc){
-  let l = sc.length, r = [], seen = new Set()
+function deleteDuplicatesFromArray(sc) {
+  let l = sc.length,
+    r = [],
+    seen = new Set()
   outer:
-    for (let i = 0; i < l; i++){
+    for (let i = 0; i < l; i++) {
       let v = sc[i];
       if (seen.has(v)) continue outer;
       seen.add(v)
       r.push(v)
     }
-    return r
+  return r
 }
 
 function other() {
@@ -146,11 +185,10 @@ function other() {
 
       if (cleaneddata[i].split(':')[0] != "You") {
         var chat = document.getElementById("chat")
-        chat.innerHTML += '<li class="other"> <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div> <div class="msg"> <p>' + localStorage.friendChat.split(' ')[1] + '</p> <p>' + cleaneddata[i].split(':')[
-          1] + '</p> <time>20:17</time> </div> </li>'
+        chat.innerHTML += '<li class="other"> <div class="avatar"><img src="http://www.imran.com/xyper_images/icon-user-default.png" draggable="false"/></div> <div class="msg"> <p>' + localStorage.friendChat.split(' ')[1] + '</p> <p>' + cleaneddata[i].split(':')[1].split('-')[1] + '</p> <time>' + base64DecodeUnicode(cleaneddata[i].split(':')[1].split('-')[0]) + '</time> </div> </li>'
       } else {
         var chat = document.getElementById("chat")
-        chat.innerHTML += '<li class="self"> <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div> <div class="msg"> <p>You</p> <p>' + cleaneddata[i].split(':')[1] + '</p> <time>20:17</time> </div> </li>'
+        chat.innerHTML += '<li class="self"> <div class="avatar"><img src="http://www.imran.com/xyper_images/icon-user-default.png" draggable="false"/></div> <div class="msg"> <p>You</p> <p>' + cleaneddata[i].split(':')[1].split('-')[1] + '</p> <time>' + base64DecodeUnicode(cleaneddata[i].split(':')[1].split('-')[0]) + '</time> </div> </li>'
       }
     }
   }

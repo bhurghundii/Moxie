@@ -415,12 +415,12 @@ class Buddy(object):
                         name = line[17:]
                     else:
                         name = u""
-
+                print 'Adding: ' + address + ' with ' + name 
                 buddy = Buddy(address, self.bl, name)
                 self.bl.addBuddy(buddy)
 
             i = i + 1
-        print 'Done adding friends!'
+
         file = open('AddBuffer.txt', "w")
         file.write('')
 

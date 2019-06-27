@@ -1,3 +1,5 @@
+
+
 window.onload = function() {
 
   if (isReleaseBuild() == 0) {
@@ -48,6 +50,20 @@ window.onload = function() {
       if (err) throw err;
       console.log("It's saved!");
     });
+
+    fs.writeFile('torchat/dist/torchat/currentSession.txt', '', {
+      flag: 'w'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
+
+    fs.writeFile('torchat/dist/torchat/buddy-chatProperties.txt', '', {
+      flag: 'wx'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
   }
 
   if (isReleaseBuild() == 2) {
@@ -60,6 +76,20 @@ window.onload = function() {
     });
 
     fs.writeFile('torchat/dist/statusUpdates.txt', '', {
+      flag: 'wx'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
+
+    fs.writeFile('torchat/dist/currentSession.txt', '', {
+      flag: 'w'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
+
+    fs.writeFile('torchat/dist/buddy-chatProperties.txt', '', {
       flag: 'wx'
     }, function(err) {
       if (err) throw err;

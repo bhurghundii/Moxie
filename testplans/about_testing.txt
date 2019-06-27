@@ -1,0 +1,7 @@
+TESTING FOR MOXIE GOES AS FOLLOWS
+----------------------------------
+Current Version: 0.0.3
+
+featurestests: Every version, we have goals. if these goals are met, then it's a yes / no
+
+testscripts: If we ever figure how to do automated testing here, then they wll go here. 

@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['torchat.py'],
-             pathex=['/home/ubuntu/Moxie/src/torchat'],
+             pathex=['Z:\\home\\ubuntu\\Moxie\\src\\torchat'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -19,18 +19,14 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
+          a.binaries,
+          a.zipfiles,
+          a.datas,
           [],
-          exclude_binaries=True,
           name='torchat',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
+          runtime_tmpdir=None,
           console=True )
-coll = COLLECT(exe,
-               a.binaries,
-               a.zipfiles,
-               a.datas,
-               strip=False,
-               upx=True,
-               name='torchat')

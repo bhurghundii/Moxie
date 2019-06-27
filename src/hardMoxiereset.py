@@ -7,7 +7,10 @@ def removeChatLogs(directory):
     for file in directoryFiles:
         if (len(file[:-4]) == 16 and file[-4:] == '.txt'):
             os.remove(directory +'/' + file)
-            
+        if "_offline.txt" in file:
+            os.remove(directory +'/' + file)
+
+
 print 'Cleaning MOXIE'
 if os.path.isfile("me.info"):
     os.remove("me.info")
