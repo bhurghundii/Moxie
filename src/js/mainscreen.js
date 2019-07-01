@@ -285,7 +285,8 @@ function StatusUpdate() {
         content.innerHTML += "<div class='StatusUpdateMessage'> <p style='font-weight: bold;'>" + data[i].split('#')[0] + "</p>" + "<p>" + data[i].split('#')[1].split('-')[1] + "</p> <p>" + data[i].split('#')[1].split('-')[0] + "<hr style='width: 500px; height:1px;'> </div>"
       }
     }
-  }
+  }}
+  
 
   function addFriendManually() {
     var id = document.getElementById('idInput').value;

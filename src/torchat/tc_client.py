@@ -397,7 +397,6 @@ class Buddy(object):
         self.sendOfflineMessages2()
 
 
-
     def sendPingsToNewFriends(self):
         file = open('AddBuffer.txt', "r")
         buffer = file.read()
@@ -415,14 +414,23 @@ class Buddy(object):
                         name = line[17:]
                     else:
                         name = u""
-                print 'Adding: ' + address + ' with ' + name 
+                print 'Adding: ' + address + ' with ' + name
                 buddy = Buddy(address, self.bl, name)
                 self.bl.addBuddy(buddy)
+                #buddy.sendPing()
+                file = open(address + '_offline.txt', "a")
+                #{"sender":"Me","reciever":"oamdv7xq7k5stmg2","textValue":"aag","textType":"SimpleMessage"}
+
+                getID = open(os.path.join(os.pardir, 'me.info'), "r")
+                you = (getID.read()).split(' ')[1]
+
+                #file.write('{"sender":"' + you + '","reciever":"' + address + '","textValue":"PINGBACKPROTOCOL","textType":"PINGBACKPROTOCOL"}' + '\r\n')
+                #file.close()
 
             i = i + 1
 
-        file = open('AddBuffer.txt', "w")
-        file.write('')
+        #file = open('AddBuffer.txt', "w")
+        #file.write('')
 
 
 
@@ -689,10 +697,9 @@ class BuddyHashProperties:
         for i in range(0, len(buffer.split('\n')) - 1):
             newdata[buffer.split('\n')[i].split(' ')[0]] = 0
             b_len = i
-        print newdata
+
 
         olddata = self.getHash()
-        print olddata
 
         for key in newdata:
             print key
@@ -700,7 +707,6 @@ class BuddyHashProperties:
                 pass
             else:
                 olddata[key] = 0
-                print olddata
 
         file = open('buddy-chatProperties.txt', "w")
         file.write(str(olddata))
@@ -1672,6 +1678,7 @@ class ProtocolMsg_status(ProtocolMsg):
 
             #This function handles all the message sending
             self.buddy.mainMessageFunction()
+
             #avoid timeout of in-connection
             self.connection.last_active = time.time()
 
@@ -2019,6 +2026,25 @@ class Receiver(threading.Thread):
 
                         if self.running:
                             print 'RECIEVED: ' + line
+                            dar = line
+                            try:
+                                if dar.split(' ')[0] == 'ping':
+                                    pingfrom = dar.split(' ')[1]
+                                    print pingfrom
+                                    addbuffer = open('AddBuffer.txt', "r")
+                                    l = addbuffer.read().split('\n')
+                                    toRemove = []
+                                    for text in l:
+                                        if pingfrom not in text and text != '':
+                                            toRemove.append(text)
+
+                                    addbuffer = open('AddBuffer.txt', "w")
+                                    for x in toRemove:
+                                        addbuffer.write(x + "\n")
+                                    print 'Dealt with ping'
+                            except Exception as e:
+                                print e
+
                             try:
                             #    message {"sender":"Me","reciever":"g5mlo4lohqjpm5tf","textValue":"my stupid child","textType":"Status"}
                                 print line.split('message ')[1]
@@ -2048,12 +2074,9 @@ class Receiver(threading.Thread):
                                 #   file = open(d['sender'] + '_offline.txt', "a")
                                 #   file.write('{"sender":"' + d['reciever'] + ' ","reciever":"' + d['sender'] + '","textValue":"!PINGBACKPROTOCOL!","textType":"ReturnFriend"}')
 
-                                if (d['textType'] == 'ReturnFriend'):
-                                    pass
-                                    #Get value of who this is returning from and delete it if it's in the list
-
                             except:
                                 print '(2) There is nothing to decode, could be a ping'
+
                             try:
                                 # on outgoing connections we do not allow any
                                 # incoming messages other than file*
@@ -2179,13 +2202,21 @@ class OutConnection(threading.Thread):
                                     self.close()
 
                     except Exception as e:
-                        try:
-                            print "(2) %s out-connection sending buffer" % self.address
-                            self.socket.send(text)
-                        except:
-                            print "(2) out-connection send error"
-                            self.bl.onErrorOut(self)
-                            self.close()
+                        print 'SENDING3: ' + text + ' to ' + self.address
+
+                        currentsession = tuple(open('currentSession.txt', 'r'))
+                        print currentsession
+                        if text not in currentsession:
+                            try:
+                                print 'Comparision done, sending'
+                                print "(2) %s out-connection sending buffer" % self.address
+                                self.socket.send(text)
+                                file = open('currentSession.txt', "a")
+                                file.write(text)
+                            except:
+                                print "(2) out-connection send error"
+                                self.bl.onErrorOut(self)
+                                self.close()
 
                 time.sleep(0.2)
 

@@ -1,10 +1,14 @@
-import os
+line = 'ping c34fhyw2fz33iqft 101879117728266560207218866833999398359899467618003856140581111745272199517420'
+if line.split(' ')[0] == 'ping':
+    pingfrom = line.split(' ')[1]
+    addbuffer = open('AddBuffer.txt', "r")
+    l = addbuffer.read().split('\n')
+    toRemove = []
+    for text in l:
+        if pingfrom not in text and text != '':
+            toRemove.append(text)
+    print toRemove
 
-def removeChatLogs(directory):
-    directoryFiles =  os.listdir(directory)
-
-    for file in directoryFiles:
-        if (len(file[:-4]) == 16 and file[-4:] == '.txt'):
-            os.remove(directory +'/' + file)
-
-removeChatLogs('../torchat')
+    addbuffer = open('AddBuffer.txt', "w")
+    for line in toRemove:
+        addbuffer.write(line + "\n")
