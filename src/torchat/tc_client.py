@@ -32,6 +32,7 @@ import config
 import version
 import json
 import ast
+from collections import OrderedDict
 
 TORCHAT_PORT = 11009 #do NOT change this.
 TOR_CONFIG = "tor" #the name of the active section in the .ini file
@@ -395,6 +396,8 @@ class Buddy(object):
 
         self.sendPingsToNewFriends()
         self.sendOfflineMessages2()
+        dash = open('currentPings.txt', "w")
+        dash.write('')
 
 
     def sendPingsToNewFriends(self):
@@ -2153,7 +2156,8 @@ class InConnection(object):
         if self.buddy:
             self.buddy.conn_in = None
 
-
+MAXPINGS = 10
+PINGSOUTGOING = 0
 class OutConnection(threading.Thread):
     def __init__(self, address, buddy_list, buddy):
         threading.Thread.__init__(self)
@@ -2176,13 +2180,13 @@ class OutConnection(threading.Thread):
             print "(2) connected to %s" % self.address
             self.bl.onConnected(self)
             self.receiver = Receiver(self, False) # this Receiver will only accept file* messages
+            self.send_buffer = list(OrderedDict.fromkeys(self.send_buffer))
             while self.running:
                 while len(self.send_buffer) > 0:
                     text = self.send_buffer.pop(0)
 
                     #BEFORE WE SEND, WE CHECK WHETHER THE ID HAS ENDED AND WE SHOULD SEND IT!
                     print 'SENDING2: ' + text + ' to ' + self.address
-
 
                     try:
                         d = json.loads(text.split('message ')[1])
@@ -2202,21 +2206,21 @@ class OutConnection(threading.Thread):
                                     self.close()
 
                     except Exception as e:
-                        print 'SENDING3: ' + text + ' to ' + self.address
-
-                        currentsession = tuple(open('currentSession.txt', 'r'))
-                        print currentsession
-                        if text not in currentsession:
+                        print e
+                        try:
+                            #If its a message that just wont send, ignore it
+                            d = json.loads(text.split('message ')[1])
+                        except:
                             try:
-                                print 'Comparision done, sending'
                                 print "(2) %s out-connection sending buffer" % self.address
                                 self.socket.send(text)
-                                file = open('currentSession.txt', "a")
-                                file.write(text)
                             except:
                                 print "(2) out-connection send error"
                                 self.bl.onErrorOut(self)
                                 self.close()
+
+                        print 'Done sending'
+
 
                 time.sleep(0.2)
 

@@ -35,6 +35,7 @@ function getChatID(SendToID) {
   var fs = require('fs');
   var data = fs.readFileSync('torchat/buddy-chatProperties.txt');
   return data.toString().split("'" + SendToID + "':")[1].split("}")[0]
+  //CHECK WHY IT ISNT GOING TO MAINME
 }
 
 var chat = document.getElementById("buddyname")
