@@ -344,9 +344,7 @@ class Buddy(object):
                 try:
                     #Break each line
                     s = buffer.split('\n')[i]
-                    print s
                     d = json.loads(s)
-                    print d
                     #Check if it's a request to add a friend
                     #TODO: BUILD HASH MAP FOR COUNTER MESSAGES
                     if d['textType'] == 'AddFriend':
@@ -396,8 +394,6 @@ class Buddy(object):
 
         self.sendPingsToNewFriends()
         self.sendOfflineMessages2()
-        dash = open('currentPings.txt', "w")
-        dash.write('')
 
 
     def sendPingsToNewFriends(self):
@@ -421,7 +417,7 @@ class Buddy(object):
                 buddy = Buddy(address, self.bl, name)
                 self.bl.addBuddy(buddy)
                 print 'SENDING PING HERE 1'
-                buddy.sendPing()
+                #buddy.sendPing()
                 #file = open(address + '_offline.txt', "a")
                 #{"sender":"Me","reciever":"oamdv7xq7k5stmg2","textValue":"aag","textType":"SimpleMessage"}
 
@@ -433,8 +429,8 @@ class Buddy(object):
 
             i = i + 1
 
-        #file = open('AddBuffer.txt', "w")
-        #file.write('')
+        file = open('AddBuffer.txt', "w")
+        file.write('')
 
 
 
@@ -479,6 +475,7 @@ class Buddy(object):
         #this will be called in the incoming status message
         #FIXME: call this from onStatus() instead, this would be the ntural place for it
         text = self.getOfflineMessages()
+        print text
         if text:
             if self.isFullyConnected():
                 wipeFile(self.getOfflineFileName())
@@ -490,9 +487,6 @@ class Buddy(object):
                     #text is unicode, so we must encode it to UTF-8 again.
                     message = ProtocolMsg_message(self, sending.encode("UTF-8"))
                     message.send()
-            else:
-                print "(2) could not send offline messages, not fully connected."
-                pass
 
     def getDisplayNameOrAddress(self):
         if self.name == "":
@@ -565,8 +559,8 @@ class Buddy(object):
         else:
             if self.conn_in:
                 self.sendStatus()
-            '''
             else:
+
                 # still waiting for return connection
                 if self.count_unanswered_pings < config.MAX_UNANSWERED_PINGS:
                     print 'SENDING PING HERE 2'
@@ -576,7 +570,8 @@ class Buddy(object):
                     # maybe this will help
                     print "(2) too many unanswered pings to %s on same connection" % self.address
                     self.disconnect()
-            '''
+            
+
 
     def sendPing(self):
         print "(2) PING >>> %s" % self.address
@@ -1803,17 +1798,6 @@ class ProtocolMsg_message(ProtocolMsg):
             if self.buddy in self.bl.list:
                 message = self.text
 
-                '''
-                file = open(self.buddy.address + '.txt', "a")
-                file.write("")
-
-                if (message.split('#')[0] != "status"):
-                    file = open(self.buddy.address + '.txt', "a")
-                    file.write(self.buddy.address + ":" + self.text + "\r\n")
-                else:
-                    file = open('statusUpdates.txt', "a")
-                    file.write(self.buddy.name + "" + self.text[6:] +"\r\n")
-                '''
                 self.buddy.sendChatMessage(self.text)
 
             else:
@@ -2160,8 +2144,7 @@ class InConnection(object):
         if self.buddy:
             self.buddy.conn_in = None
 
-MAXPINGS = 10
-PINGSOUTGOING = 0
+
 class OutConnection(threading.Thread):
     def __init__(self, address, buddy_list, buddy):
         threading.Thread.__init__(self)
@@ -2197,7 +2180,6 @@ class OutConnection(threading.Thread):
 
                         if (d['textType'] == 'SimpleMessage' or d['textType'] == 'Status'):
                             currentsession = tuple(open('currentSession.txt', 'r'))
-                            print currentsession
                             if text not in currentsession:
                                 try:
                                     print 'Comparision done, sending'
