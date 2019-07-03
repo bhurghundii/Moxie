@@ -420,12 +420,13 @@ class Buddy(object):
                 print 'Adding: ' + address + ' with ' + name
                 buddy = Buddy(address, self.bl, name)
                 self.bl.addBuddy(buddy)
-                #buddy.sendPing()
-                file = open(address + '_offline.txt', "a")
+                print 'SENDING PING HERE 1'
+                buddy.sendPing()
+                #file = open(address + '_offline.txt', "a")
                 #{"sender":"Me","reciever":"oamdv7xq7k5stmg2","textValue":"aag","textType":"SimpleMessage"}
 
-                getID = open(os.path.join(os.pardir, 'me.info'), "r")
-                you = (getID.read()).split(' ')[1]
+                #getID = open(os.path.join(os.pardir, 'me.info'), "r")
+                #you = (getID.read()).split(' ')[1]
 
                 #file.write('{"sender":"' + you + '","reciever":"' + address + '","textValue":"PINGBACKPROTOCOL","textType":"PINGBACKPROTOCOL"}' + '\r\n')
                 #file.close()
@@ -565,15 +566,18 @@ class Buddy(object):
         else:
             if self.conn_in:
                 self.sendStatus()
+            '''
             else:
                 # still waiting for return connection
                 if self.count_unanswered_pings < config.MAX_UNANSWERED_PINGS:
+                    print 'SENDING PING HERE 2'
                     self.sendPing()
                     print "(2) unanswered pings to %s so far: %i" % (self.address, self.count_unanswered_pings)
                 else:
                     # maybe this will help
                     print "(2) too many unanswered pings to %s on same connection" % self.address
                     self.disconnect()
+            '''
 
     def sendPing(self):
         print "(2) PING >>> %s" % self.address
@@ -1561,6 +1565,7 @@ class ProtocolMsg_ping(ProtocolMsg):
                 #the buddie's last pong might have been lost when his first conn-out failed
                 #so we send another ping, just to be on the safe side.
                 self.buddy.count_unanswered_pings = 0
+                print 'SENDING PING HERE 3'
                 self.buddy.sendPing()
 
         if self.buddy.isAlreadyPonged():
@@ -2186,10 +2191,11 @@ class OutConnection(threading.Thread):
                     text = self.send_buffer.pop(0)
 
                     #BEFORE WE SEND, WE CHECK WHETHER THE ID HAS ENDED AND WE SHOULD SEND IT!
-                    print 'SENDING2: ' + text + ' to ' + self.address
 
                     try:
                         d = json.loads(text.split('message ')[1])
+                        print 'SENDING2: ' + text + ' to ' + self.address
+
                         if (d['textType'] == 'SimpleMessage' or d['textType'] == 'Status'):
                             currentsession = tuple(open('currentSession.txt', 'r'))
                             print currentsession
@@ -2212,6 +2218,8 @@ class OutConnection(threading.Thread):
                             d = json.loads(text.split('message ')[1])
                         except:
                             try:
+                                file = open('pingfordemo.txt', "a")
+                                file.write(text)
                                 print "(2) %s out-connection sending buffer" % self.address
                                 self.socket.send(text)
                             except:
