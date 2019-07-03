@@ -123,6 +123,28 @@ function sendText() {
 
 setInterval(other, 1000);
 
+function getUTCTime(d) {
+  console.log(d)
+  d = d.replace(".", "");
+  var date = new Date(parseInt(d));
+  console.log(date)
+  var formatOptions = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  };
+  var dateString = date.toLocaleDateString('en-US', formatOptions);
+  // => "02/17/2017, 11:32 PM"
+
+  dateString = dateString.replace(',', '')
+    .replace('PM', 'p.m.')
+    .replace('AM', 'a.m.');
+  return dateString
+}
+
 function getDateTime() {
 
   var date = new Date();
@@ -186,10 +208,10 @@ function other() {
 
       if (cleaneddata[i].split(':')[0] != "You") {
         var chat = document.getElementById("chat")
-        chat.innerHTML += '<li class="other"> <div class="avatar"><img src="http://www.imran.com/xyper_images/icon-user-default.png" draggable="false"/></div> <div class="msg"> <p>' + localStorage.friendChat.split(' ')[1] + '</p> <p>' + cleaneddata[i].split(':')[1].split('-')[1] + '</p> <time>' + (cleaneddata[i].split(':')[1].split('-')[0]) + '</time> </div> </li>'
+        chat.innerHTML += '<li class="other"> <div class="avatar"><img src="http://www.imran.com/xyper_images/icon-user-default.png" draggable="false"/></div> <div class="msg"> <p>' + localStorage.friendChat.split(' ')[1] + '</p> <p>' + cleaneddata[i].split(':')[1].split('-')[1] + '</p> <time>' + getUTCTime(cleaneddata[i].split(':')[1].split('-')[0]) + '</time> </div> </li>'
       } else {
         var chat = document.getElementById("chat")
-        chat.innerHTML += '<li class="self"> <div class="avatar"><img src="http://www.imran.com/xyper_images/icon-user-default.png" draggable="false"/></div> <div class="msg"> <p>You</p> <p>' + cleaneddata[i].split(':')[1].split('-')[1] + '</p> <time>' + (cleaneddata[i].split(':')[1].split('-')[0]) + '</time> </div> </li>'
+        chat.innerHTML += '<li class="self"> <div class="avatar"><img src="http://www.imran.com/xyper_images/icon-user-default.png" draggable="false"/></div> <div class="msg"> <p>You</p> <p>' + cleaneddata[i].split(':')[1].split('-')[1] + '</p> <time>' + getUTCTime(cleaneddata[i].split(':')[1].split('-')[0]) + '</time> </div> </li>'
       }
     }
   }

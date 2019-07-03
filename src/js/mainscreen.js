@@ -246,6 +246,27 @@ function deleteDuplicatesFromArray(sc) {
   return r
 }
 
+function getUTCTime(d) {
+  console.log(d)
+  d = d.replace(".", "");
+  var date = new Date(parseInt(d));
+  console.log(date)
+  var formatOptions = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  };
+  var dateString = date.toLocaleDateString('en-US', formatOptions);
+  // => "02/17/2017, 11:32 PM"
+
+  dateString = dateString.replace(',', '')
+    .replace('PM', 'p.m.')
+    .replace('AM', 'a.m.');
+  return dateString
+}
 
 function StatusUpdate() {
   if (isReleaseBuild() == 0) {
@@ -257,7 +278,7 @@ function StatusUpdate() {
       data = deleteDuplicatesFromArray(data.split('\n'))
       for (var i = 0; i < data.length - 1; i++) {
         var content = document.getElementById("ContentID")
-        content.innerHTML += "<div class='StatusUpdateMessage'> <p style='font-weight: bold;'>" + data[i].split('#')[0] + "</p>" + "<p>" + data[i].split('#')[1].split('-')[1] + "</p> <p>" + data[i].split('#')[1].split('-')[0] + "<hr style='width: 500px; height:1px;'> </div>"
+        content.innerHTML += "<div class='StatusUpdateMessage'> <p style='font-weight: bold;'>" + data[i].split('#')[0] + "</p>" + "<p>" + data[i].split('#')[1].split('-')[1] + "</p> <p>" + getUTCTime(data[i].split('#')[1].split('-')[0]) + "<hr style='width: 500px; height:1px;'> </div>"
       }
     }
   }
@@ -271,7 +292,7 @@ function StatusUpdate() {
       data = deleteDuplicatesFromArray(data.split('\n'))
       for (var i = 0; i < data.length - 1; i++) {
         var content = document.getElementById("ContentID")
-        content.innerHTML += "<div class='StatusUpdateMessage'> <p style='font-weight: bold;'>" + data[i].split('#')[0] + "</p>" + "<p>" + data[i].split('#')[1].split('-')[1] + "</p> <p>" + data[i].split('#')[1].split('-')[0] + "<hr style='width: 500px; height:1px;'> </div>"
+        content.innerHTML += "<div class='StatusUpdateMessage'> <p style='font-weight: bold;'>" + data[i].split('#')[0] + "</p>" + "<p>" + data[i].split('#')[1].split('-')[1] + "</p> <p>" + getUTCTime(data[i].split('#')[1].split('-')[0]) + "<hr style='width: 500px; height:1px;'> </div>"
       }
     }
   }
@@ -285,76 +306,77 @@ function StatusUpdate() {
       data = deleteDuplicatesFromArray(data.split('\n'))
       for (var i = 0; i < data.length - 1; i++) {
         var content = document.getElementById("ContentID")
-        content.innerHTML += "<div class='StatusUpdateMessage'> <p style='font-weight: bold;'>" + data[i].split('#')[0] + "</p>" + "<p>" + data[i].split('#')[1].split('-')[1] + "</p> <p>" + data[i].split('#')[1].split('-')[0] + "<hr style='width: 500px; height:1px;'> </div>"
-      }
-    }
-  }}
-
-
-  function addFriendManually() {
-    var id = document.getElementById('idInput').value;
-    var name = document.getElementById('nameInput').value;
-    if (name && id) {
-      const fs = require('fs');
-      if (id !== "") {
-        var obj = new Object();
-        obj.sender = getID();
-        obj.senderName = getName();
-        obj.reciever = id;
-        obj.recieverName = name;
-        obj.textValue = '!PINGBACKPROTOCOL';
-        obj.textType = "AddFriend";
-
-        var jsonString = JSON.stringify(obj);
-
-        if (isReleaseBuild() == 0) {
-          fs.appendFile('torchat/buddy-list.txt', id + ' ' + name + '\n', function(err) {
-            if (err) throw err;
-            el = document.getElementById('error');
-            el.style.visibility = 'visible';
-
-            el.innerHTML = "Just added " + name
-          });
-
-          fs.appendFile('sendBuffer.txt', jsonString, function(err) {
-            if (err) throw err;
-          });
-        }
-
-        if (isReleaseBuild() == 1) {
-          fs.appendFile('torchat/dist/torchat/buddy-list.txt', id + ' ' + name + '\n', function(err) {
-            if (err) throw err;
-            el = document.getElementById('error');
-            el.style.visibility = 'visible';
-
-            el.innerHTML = "Just added " + name
-          });
-
-          fs.appendFile('torchat/dist/sendBuffer.txt', jsonString, function(err) {
-            if (err) throw err;
-          });
-        }
-
-        if (isReleaseBuild() == 2) {
-          fs.appendFile('torchat/dist/buddy-list.txt', id + ' ' + name + '\n', function(err) {
-            if (err) throw err;
-            el = document.getElementById('error');
-            el.style.visibility = 'visible';
-
-            el.innerHTML = "Just added " + name
-          });
-
-          fs.appendFile('torchat/sendBuffer.txt', jsonString, function(err) {
-            if (err) throw err;
-          });
-        }
-      } else {
-        el = document.getElementById('error');
-        el.style.visibility = 'visible';
+        content.innerHTML += "<div class='StatusUpdateMessage'> <p style='font-weight: bold;'>" + data[i].split('#')[0] + "</p>" + "<p>" + data[i].split('#')[1].split('-')[1] + "</p> <p>" + getUTCTime(data[i].split('#')[1].split('-')[0]) + "<hr style='width: 500px; height:1px;'> </div>"
       }
     }
   }
+}
 
 
-  mainPageStart();
-  checkTorChatStatus();
+function addFriendManually() {
+  var id = document.getElementById('idInput').value;
+  var name = document.getElementById('nameInput').value;
+  if (name && id) {
+    const fs = require('fs');
+    if (id !== "") {
+      var obj = new Object();
+      obj.sender = getID();
+      obj.senderName = getName();
+      obj.reciever = id;
+      obj.recieverName = name;
+      obj.textValue = '!PINGBACKPROTOCOL';
+      obj.textType = "AddFriend";
+
+      var jsonString = JSON.stringify(obj);
+
+      if (isReleaseBuild() == 0) {
+        fs.appendFile('torchat/buddy-list.txt', id + ' ' + name + '\n', function(err) {
+          if (err) throw err;
+          el = document.getElementById('error');
+          el.style.visibility = 'visible';
+
+          el.innerHTML = "Just added " + name
+        });
+
+        fs.appendFile('sendBuffer.txt', jsonString, function(err) {
+          if (err) throw err;
+        });
+      }
+
+      if (isReleaseBuild() == 1) {
+        fs.appendFile('torchat/dist/torchat/buddy-list.txt', id + ' ' + name + '\n', function(err) {
+          if (err) throw err;
+          el = document.getElementById('error');
+          el.style.visibility = 'visible';
+
+          el.innerHTML = "Just added " + name
+        });
+
+        fs.appendFile('torchat/dist/sendBuffer.txt', jsonString, function(err) {
+          if (err) throw err;
+        });
+      }
+
+      if (isReleaseBuild() == 2) {
+        fs.appendFile('torchat/dist/buddy-list.txt', id + ' ' + name + '\n', function(err) {
+          if (err) throw err;
+          el = document.getElementById('error');
+          el.style.visibility = 'visible';
+
+          el.innerHTML = "Just added " + name
+        });
+
+        fs.appendFile('torchat/sendBuffer.txt', jsonString, function(err) {
+          if (err) throw err;
+        });
+      }
+    } else {
+      el = document.getElementById('error');
+      el.style.visibility = 'visible';
+    }
+  }
+}
+
+
+mainPageStart();
+checkTorChatStatus();
