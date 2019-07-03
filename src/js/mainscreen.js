@@ -78,13 +78,16 @@ function sendStatusUpdate() {
   }
 
 
+  timeSeconds = (new Date() / 1000)
+
+
   for (var i = 0; i < friendslist.split('\n').length - 1; i++) {
     console.log(friendslist.split('\n')[i].split(' ')[0] + " " + statusText)
     if (isReleaseBuild() == 0) {
       var obj = new Object();
       obj.sender = getID();
       obj.reciever = friendslist.split('\n')[i].split(' ')[i];
-      obj.textValue = (new Date() / 1000) + "-" + statusText;
+      obj.textValue = timeSeconds + "-" + statusText;
       obj.textType = "Status";
       var jsonString = JSON.stringify(obj);
 
@@ -286,7 +289,7 @@ function StatusUpdate() {
       }
     }
   }}
-  
+
 
   function addFriendManually() {
     var id = document.getElementById('idInput').value;

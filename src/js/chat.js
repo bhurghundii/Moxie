@@ -186,10 +186,10 @@ function other() {
 
       if (cleaneddata[i].split(':')[0] != "You") {
         var chat = document.getElementById("chat")
-        chat.innerHTML += '<li class="other"> <div class="avatar"><img src="http://www.imran.com/xyper_images/icon-user-default.png" draggable="false"/></div> <div class="msg"> <p>' + localStorage.friendChat.split(' ')[1] + '</p> <p>' + cleaneddata[i].split(':')[1].split('-')[1] + '</p> <time>' + base64DecodeUnicode(cleaneddata[i].split(':')[1].split('-')[0]) + '</time> </div> </li>'
+        chat.innerHTML += '<li class="other"> <div class="avatar"><img src="http://www.imran.com/xyper_images/icon-user-default.png" draggable="false"/></div> <div class="msg"> <p>' + localStorage.friendChat.split(' ')[1] + '</p> <p>' + cleaneddata[i].split(':')[1].split('-')[1] + '</p> <time>' + (cleaneddata[i].split(':')[1].split('-')[0]) + '</time> </div> </li>'
       } else {
         var chat = document.getElementById("chat")
-        chat.innerHTML += '<li class="self"> <div class="avatar"><img src="http://www.imran.com/xyper_images/icon-user-default.png" draggable="false"/></div> <div class="msg"> <p>You</p> <p>' + cleaneddata[i].split(':')[1].split('-')[1] + '</p> <time>' + base64DecodeUnicode(cleaneddata[i].split(':')[1].split('-')[0]) + '</time> </div> </li>'
+        chat.innerHTML += '<li class="self"> <div class="avatar"><img src="http://www.imran.com/xyper_images/icon-user-default.png" draggable="false"/></div> <div class="msg"> <p>You</p> <p>' + cleaneddata[i].split(':')[1].split('-')[1] + '</p> <time>' + (cleaneddata[i].split(':')[1].split('-')[0]) + '</time> </div> </li>'
       }
     }
   }
