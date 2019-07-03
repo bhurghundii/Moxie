@@ -481,7 +481,6 @@ class Buddy(object):
         text = self.getOfflineMessages()
         if text:
             if self.isFullyConnected():
-
                 wipeFile(self.getOfflineFileName())
                 for i in range(len(text.split('\n'))):
                     sending = text.split('\n')[i]
@@ -2218,10 +2217,11 @@ class OutConnection(threading.Thread):
                             d = json.loads(text.split('message ')[1])
                         except:
                             try:
-                                file = open('pingfordemo.txt', "a")
-                                file.write(text)
-                                print "(2) %s out-connection sending buffer" % self.address
-                                self.socket.send(text)
+
+                                if ('{' not in text) and ('}' not in text) and ('textValue' not in text):
+                                    print 'Sending2: ' + text
+                                    print "(2) %s out-connection sending buffer" % self.address
+                                    self.socket.send(text)
                             except:
                                 print "(2) out-connection send error"
                                 self.bl.onErrorOut(self)
