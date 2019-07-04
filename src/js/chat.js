@@ -137,7 +137,6 @@ function getUTCTime(d) {
     hour12: true
   };
   var dateString = date.toLocaleDateString('en-US', formatOptions);
-  // => "02/17/2017, 11:32 PM"
 
   dateString = dateString.replace(',', '')
     .replace('PM', 'p.m.')

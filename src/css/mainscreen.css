@@ -41,6 +41,7 @@
 }
 
 #ContentID {
+  overflow: visible;
   position: absolute;
   top: 10%;
   left: 10%;
@@ -164,7 +165,7 @@ input.textarea {
   overflow: hidden;
   background: #CDCDCD;
   box-shadow: 0 0 3px #CDCDCD;
-  position: absolute;
+  position: fixed;
   left: 37.5%;
   bottom: -10%;
   z-index: 25;
@@ -178,8 +179,8 @@ input.textarea {
   overflow: hidden;
   background: white;
   box-shadow: 0 0 3px white;
-  position: absolute;
-  left: 38%;
+  position: fixed;
+  left: 56%;
   bottom: 0%;
   z-index: 26;
 }
@@ -192,7 +193,7 @@ input.textarea {
   overflow: hidden;
   background: white;
   box-shadow: 0 0 3px white;
-  position: absolute;
+  position: fixed;
   left: 40%;
   bottom: 10%;
   z-index: 26;
@@ -207,7 +208,7 @@ input.textarea {
   overflow: hidden;
   background: white;
   box-shadow: 0 0 3px white;
-  position: absolute;
+  position: fixed;
   right: 40%;
   bottom: 10%;
 }
@@ -221,8 +222,8 @@ input.textarea {
   overflow: hidden;
   background: white;
   box-shadow: 0 0 3px white;
-  position: absolute;
-  right: 38%;
+  position: fixed;
+  left: 38%;
   bottom: 0%;
 }
 
@@ -242,8 +243,12 @@ input.textarea {
 #error{
   width: 200%;
 }
-html {
-  overflow: hidden;
+
+.UIButton{
+    position: fixed;
+    bottom: 0%;
+    left: 45%;
+
 }
 
 .Toolkit {
