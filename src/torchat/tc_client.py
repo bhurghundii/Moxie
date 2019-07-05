@@ -61,6 +61,11 @@ f = open('torchatready.txt',"w")
 f.write('Not Ready')
 f.close()
 
+def writeToLog(log_message):
+    file = open('MoxieTorLog.txt', "a")
+    file.write(log_message)
+    file.close()
+
 def splitLine(text):
     """split a line of text on the first space character and return
     two strings, the first word and the remaining string. This is
@@ -325,6 +330,7 @@ class Buddy(object):
         buddyPropHash.updateHashBuddies()
         #Reading the send buffer which basically is the message bridge between Torchat and Moxie
         print 'Looping over the mainMessageFunction'
+        writeToLog('Looping over the mainMessageFunction')
         file = open('AddBuffer.txt', "a")
         file.close()
 
@@ -348,7 +354,6 @@ class Buddy(object):
                     #Check if it's a request to add a friend
                     #TODO: BUILD HASH MAP FOR COUNTER MESSAGES
                     if d['textType'] == 'AddFriend':
-                        print 'Got an AddFriend'
                         file = open('AddBuffer.txt', "a")
                         file.write(d['reciever'] + ' ' + d['recieverName'] + '\n')
 
@@ -416,7 +421,6 @@ class Buddy(object):
                 print 'Adding: ' + address + ' with ' + name
                 buddy = Buddy(address, self.bl, name)
                 self.bl.addBuddy(buddy)
-                print 'SENDING PING HERE 1'
                 #buddy.sendPing()
                 #file = open(address + '_offline.txt', "a")
                 #{"sender":"Me","reciever":"oamdv7xq7k5stmg2","textValue":"aag","textType":"SimpleMessage"}
@@ -563,14 +567,13 @@ class Buddy(object):
 
                 # still waiting for return connection
                 if self.count_unanswered_pings < config.MAX_UNANSWERED_PINGS:
-                    print 'SENDING PING HERE 2'
                     self.sendPing()
                     print "(2) unanswered pings to %s so far: %i" % (self.address, self.count_unanswered_pings)
                 else:
                     # maybe this will help
                     print "(2) too many unanswered pings to %s on same connection" % self.address
                     self.disconnect()
-            
+
 
 
     def sendPing(self):
@@ -1559,7 +1562,6 @@ class ProtocolMsg_ping(ProtocolMsg):
                 #the buddie's last pong might have been lost when his first conn-out failed
                 #so we send another ping, just to be on the safe side.
                 self.buddy.count_unanswered_pings = 0
-                print 'SENDING PING HERE 3'
                 self.buddy.sendPing()
 
         if self.buddy.isAlreadyPonged():
@@ -2032,7 +2034,6 @@ class Receiver(threading.Thread):
                                     addbuffer = open('AddBuffer.txt', "w")
                                     for x in toRemove:
                                         addbuffer.write(x + "\n")
-                                    print 'Dealt with ping'
                             except Exception as e:
                                 print e
 
@@ -2176,7 +2177,7 @@ class OutConnection(threading.Thread):
 
                     try:
                         d = json.loads(text.split('message ')[1])
-                        print 'SENDING2: ' + text + ' to ' + self.address
+                        print 'SENDING: ' + text + ' to ' + self.address
 
                         if (d['textType'] == 'SimpleMessage' or d['textType'] == 'Status'):
                             currentsession = tuple(open('currentSession.txt', 'r'))
@@ -2201,7 +2202,7 @@ class OutConnection(threading.Thread):
                             try:
 
                                 if ('{' not in text) and ('}' not in text) and ('textValue' not in text):
-                                    print 'Sending2: ' + text
+                                    print 'Sending: ' + text
                                     print "(2) %s out-connection sending buffer" % self.address
                                     self.socket.send(text)
                             except:

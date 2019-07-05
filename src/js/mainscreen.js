@@ -20,7 +20,9 @@ function mainPageStart() {
   var chat = document.getElementById("leftMenu")
   chat.innerHTML = ''
   rl.on('line', (line) => {
+    if (line !== ""){
     chat.innerHTML += '<div onclick="localStorage.friendChat = &quot;' + line + '&quot;;" > <a href="chat.html" class="w3-bar-item w3-button"> <img class="img-circle" src="http://www.imran.com/xyper_images/icon-user-default.png"> ' + line.split(" ")[1] + '</a> </div>'
+  }
   });
 
 }
@@ -83,14 +85,15 @@ function sendStatusUpdate() {
 
   for (var i = 0; i < friendslist.split('\n').length - 1; i++) {
     console.log(friendslist.split('\n')[i].split(' ')[0] + " " + statusText)
-    if (isReleaseBuild() == 0) {
-      var obj = new Object();
-      obj.sender = getID();
-      obj.reciever = friendslist.split('\n')[i].split(' ')[i];
-      obj.textValue = timeSeconds + "-" + statusText;
-      obj.textType = "Status";
-      var jsonString = JSON.stringify(obj);
+    var obj = new Object();
+    obj.sender = getID();
+    obj.reciever = friendslist.split('\n')[i].split(' ')[i];
+    obj.textValue = timeSeconds + "-" + statusText;
+    obj.textType = "Status";
+    var jsonString = JSON.stringify(obj);
 
+
+    if (isReleaseBuild() == 0) {
       fs.appendFile("sendBuffer.txt", jsonString + "\n", function(err) {
         if (err) {
           return console.log(err);
@@ -99,7 +102,7 @@ function sendStatusUpdate() {
     }
 
     if (isReleaseBuild() == 1) {
-      fs.appendFile("torchat/dist/sendBuffer.txt", friendslist.split('\n')[i].split(' ')[i] + ":status#" + statusText + "\n", function(err) {
+      fs.appendFile("torchat/dist/sendBuffer.txt", jsonString + "\n", function(err) {
         if (err) {
           return console.log(err);
         }
@@ -107,7 +110,7 @@ function sendStatusUpdate() {
     }
 
     if (isReleaseBuild() == 2) {
-      fs.appendFile("torchat/sendBuffer.txt", friendslist.split('\n')[i].split(' ')[i] + ":status#" + statusText + "\n", function(err) {
+      fs.appendFile("torchat/sendBuffer.txt", jsonString + "\n", function(err) {
         if (err) {
           return console.log(err);
         }
@@ -197,6 +200,8 @@ var LeftMenuisActive = false;
 var RightMenuisActive = false;
 
 function toggleLeftMenu() {
+  cleanupFriendList()
+
   if (LeftMenuisActive == false) {
     document.getElementById("leftMenu").style.display = "block";
     LeftMenuisActive = true;

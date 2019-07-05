@@ -13,7 +13,6 @@ if [ "$proceedVar" == 'y' ]; then
   npm run package-linux
 
   echo "Building Python"
-  pyinstaller bump.py
 
   sed -i 's/0/1/g' MoxieFlags.config
   cp MoxieFlags.config ../release-builds/Moxie-App-linux-x64/MoxieFlags.config

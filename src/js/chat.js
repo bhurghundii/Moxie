@@ -72,22 +72,29 @@ if (isReleaseBuild() == 2) {
 
 
 function sendText() {
+  var textToSend = document.getElementById("textSent").value
+  document.getElementById("textSent").value = ""
+
+  //Parse to JSON
+  var obj = new Object();
+  obj.sender = getID();
+  obj.reciever = localStorage.friendChat.split(' ')[0];
+  obj.textValue = ((new Date() / 1000)) + "-" + textToSend;
+  obj.textType = "SimpleMessage";
+  obj.chatID = 1; //getChatID(localStorage.friendChat.split(' ')[0]);
+
+  var jsonString = JSON.stringify(obj);
+  console.log(jsonString);
+
+  const fs = require('fs');
+  fs.appendFile("debugLinuxBuild.txt", jsonString + "\n", function(err) {
+    if (err) {
+      return console.log(err);
+    }
+  });
+
   if (isReleaseBuild() == 0) {
-    var textToSend = document.getElementById("textSent").value
-    document.getElementById("textSent").value = ""
-
-    //Parse to JSON
-    var obj = new Object();
-    obj.sender = getID();
-    obj.reciever = localStorage.friendChat.split(' ')[0];
-    obj.textValue = ((new Date() / 1000)) + "-" + textToSend;
-    obj.textType = "SimpleMessage";
-    obj.chatID = getChatID(localStorage.friendChat.split(' ')[0]);
-
-    var jsonString = JSON.stringify(obj);
-    console.log(jsonString);
     const fs = require('fs');
-
     fs.appendFile("sendBuffer.txt", jsonString + "\n", function(err) {
       if (err) {
         return console.log(err);
@@ -96,11 +103,8 @@ function sendText() {
   }
 
   if (isReleaseBuild() == 1) {
-    var textToSend = document.getElementById("textSent").value
-    document.getElementById("textSent").value = ""
-    console.log(textToSend)
     const fs = require('fs');
-    fs.appendFile("torchat/dist/sendBuffer.txt", localStorage.friendChat.split(' ')[0] + ":" + textToSend + "\n", function(err) {
+    fs.appendFile("torchat/dist/sendBuffer.txt", jsonString + "\n", function(err) {
       if (err) {
         return console.log(err);
       }
@@ -108,11 +112,8 @@ function sendText() {
   }
 
   if (isReleaseBuild() == 2) {
-    var textToSend = document.getElementById("textSent").value
-    document.getElementById("textSent").value = ""
-    console.log(textToSend)
     const fs = require('fs');
-    fs.appendFile("torchat/sendBuffer.txt", localStorage.friendChat.split(' ')[0] + ":" + textToSend + "\n", function(err) {
+    fs.appendFile("torchat/sendBuffer.txt", jsonString + "\n", function(err) {
       if (err) {
         return console.log(err);
       }
@@ -191,9 +192,12 @@ function other() {
   }
   if (isReleaseBuild() == 1) {
     var data = fs.readFileSync('torchat/dist/torchat/' + localStorage.friendChat.split(' ')[0] + '.txt', 'utf8')
+    cleaneddata = deleteDuplicatesFromArray(data.split('\n'))
+
   }
   if (isReleaseBuild() == 2) {
     var data = fs.readFileSync('torchat/dist/' + localStorage.friendChat.split(' ')[0] + '.txt', 'utf8')
+    cleaneddata = deleteDuplicatesFromArray(data.split('\n'))
   }
 
 

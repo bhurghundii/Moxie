@@ -267,7 +267,7 @@ input.textarea {
   border: 10px solid orange;
   overflow: hidden;
   background: orange;
-  position: absolute;
+  position: fixed;
   left: 40%;
   bottom: 35%;
   z-index: 1;

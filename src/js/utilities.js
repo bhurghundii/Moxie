@@ -19,7 +19,7 @@ function isReleaseBuild() {
   var isRelease = 0
   try {
     data = fs.readFileSync('MoxieFlags.config', 'utf8');
-  //  console.log(data.toString());
+    //  console.log(data.toString());
     if (data.indexOf('1') > 0) {
       isRelease = 1;
     }
@@ -91,15 +91,15 @@ function getName() {
   });
 }
 
-//BASE64 encryption 
+//BASE64 encryption
 function base64EncodeUnicode(str) {
-    // First we escape the string using encodeURIComponent to get the UTF-8 encoding of the characters,
-    // then we convert the percent encodings into raw bytes, and finally feed it to btoa() function.
-    utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
-            return String.fromCharCode('0x' + p1);
-    });
+  // First we escape the string using encodeURIComponent to get the UTF-8 encoding of the characters,
+  // then we convert the percent encodings into raw bytes, and finally feed it to btoa() function.
+  utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+    return String.fromCharCode('0x' + p1);
+  });
 
-    return btoa(utf8Bytes);
+  return btoa(utf8Bytes);
 }
 
 //This was the old kill command. Only works on systems which support bash
@@ -118,3 +118,50 @@ function executeKILLSig() {
       }
     });
 }
+
+function deleteDuplicatesFromArray(sc) {
+  let l = sc.length,
+    r = [],
+    seen = new Set()
+  outer:
+    for (let i = 0; i < l; i++) {
+      let v = sc[i];
+      if (seen.has(v)) continue outer;
+      seen.add(v)
+      r.push(v)
+    }
+  return r
+}
+
+function cleanupFriendList() {
+  cleanupFile = 'torchat/buddy-list.txt';
+  var fs = require('fs');
+  fs.readFile(cleanupFile, 'utf8', function(err, data) {
+    if (err) {
+      return console.log(err);
+    }
+    var array = deleteDuplicatesFromArray(data.split('\n'))
+
+
+const writeStream = fs.createWriteStream(cleanupFile);
+
+const pathName = writeStream.path;
+    array.forEach(value => writeStream.write(`${value}\n`));
+
+// the finish event is emitted when all data has been flushed from the stream
+writeStream.on('finish', () => {
+   console.log(`wrote all the array data to file ${pathName}`);
+});
+
+// handle the errors on the write process
+writeStream.on('error', (err) => {
+    console.error(`There is an error writing the file ${pathName} => ${err}`)
+});
+
+// close the stream
+writeStream.end()
+
+  });
+}
+
+cleanupFriendList()
