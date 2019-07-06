@@ -3,8 +3,11 @@ release-builds/
 src/me.info
 src/sendBuffer.txt
 src/moxielogout.txt
+!src/torchat/portable.txt
+src/torchat/*.txt
 src/torchat/torchat.ini
 src/torchat/buddy-list.txt
+src/torchat/buddy-chatProperties.txt
 src/torchat/Tor/tor.pid
 src/torchat/pid-torchat.txt
 src/torchat/Tor/hidden_service/

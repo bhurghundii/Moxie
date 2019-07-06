@@ -31,15 +31,25 @@
   left: 96%
 }
 
+
+
+
+
 #buttonBump {
   max-width: 65%;
   height: auto;
 }
 
 #ContentID {
+  overflow: visible;
   position: absolute;
   top: 10%;
   left: 10%;
+}
+
+.addingManualFriends{
+  position: relative;
+  top: 20%;
 }
 
 #buttonChat {
@@ -52,7 +62,7 @@
   left: 1%
 }
 
-.icon{
+.icon {
   position: relative;
   left: -17.5%;
   font-size: 31px;
@@ -65,19 +75,19 @@
   width: 20%;
 }
 
-.IdInputClass{
+.IdInputClass {
   position: relative;
   left: 2.5%;
   width: 30%;
 }
 
-.NameInputClass{
+.NameInputClass {
   position: relative;
   left: 2.5%;
   width: 30%;
 }
 
-.AddClass{
+.AddClass {
   position: relative;
   left: 2.5%;
   width: 30%;
@@ -155,7 +165,7 @@ input.textarea {
   overflow: hidden;
   background: #CDCDCD;
   box-shadow: 0 0 3px #CDCDCD;
-  position: absolute;
+  position: fixed;
   left: 37.5%;
   bottom: -10%;
   z-index: 25;
@@ -169,8 +179,8 @@ input.textarea {
   overflow: hidden;
   background: white;
   box-shadow: 0 0 3px white;
-  position: absolute;
-  left: 38%;
+  position: fixed;
+  left: 56%;
   bottom: 0%;
   z-index: 26;
 }
@@ -183,7 +193,7 @@ input.textarea {
   overflow: hidden;
   background: white;
   box-shadow: 0 0 3px white;
-  position: absolute;
+  position: fixed;
   left: 40%;
   bottom: 10%;
   z-index: 26;
@@ -198,7 +208,7 @@ input.textarea {
   overflow: hidden;
   background: white;
   box-shadow: 0 0 3px white;
-  position: absolute;
+  position: fixed;
   right: 40%;
   bottom: 10%;
 }
@@ -212,13 +222,33 @@ input.textarea {
   overflow: hidden;
   background: white;
   box-shadow: 0 0 3px white;
-  position: absolute;
-  right: 38%;
+  position: fixed;
+  left: 38%;
   bottom: 0%;
 }
 
-html {
+.toolicon3-button-circle2 {
+  width: 50px;
+  height: 50px;
+  z-index: 26;
+  border-radius: 50%;
+  border: 10px solid white;
   overflow: hidden;
+  background: white;
+  box-shadow: 0 0 3px white;
+  position: absolute;
+  left: 70%;
+  bottom: 70%;
+}
+#error{
+  width: 200%;
+}
+
+.UIButton{
+    position: fixed;
+    bottom: 0%;
+    left: 45%;
+
 }
 
 .Toolkit {
@@ -227,6 +257,7 @@ html {
 
 .status {
   display: none;
+
 }
 
 .postStatusButton {
@@ -236,7 +267,7 @@ html {
   border: 10px solid orange;
   overflow: hidden;
   background: orange;
-  position: absolute;
+  position: fixed;
   left: 40%;
   bottom: 35%;
   z-index: 1;
@@ -256,4 +287,5 @@ html {
   bottom: 0%;
   z-index: 10;
 }
+
 </style>

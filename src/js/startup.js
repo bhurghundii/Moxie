@@ -1,3 +1,5 @@
+
+
 window.onload = function() {
 
   if (isReleaseBuild() == 0) {
@@ -9,7 +11,22 @@ window.onload = function() {
       console.log("It's saved!");
     });
 
+    fs.writeFile('torchat/currentSession.txt', '', {
+      flag: 'w'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
+
+
     fs.writeFile('torchat/statusUpdates.txt', '', {
+      flag: 'wx'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
+
+    fs.writeFile('torchat/buddy-chatProperties.txt', '', {
       flag: 'wx'
     }, function(err) {
       if (err) throw err;
@@ -33,6 +50,20 @@ window.onload = function() {
       if (err) throw err;
       console.log("It's saved!");
     });
+
+    fs.writeFile('torchat/dist/torchat/currentSession.txt', '', {
+      flag: 'w'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
+
+    fs.writeFile('torchat/dist/torchat/buddy-chatProperties.txt', '', {
+      flag: 'wx'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
   }
 
   if (isReleaseBuild() == 2) {
@@ -45,6 +76,20 @@ window.onload = function() {
     });
 
     fs.writeFile('torchat/dist/statusUpdates.txt', '', {
+      flag: 'wx'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
+
+    fs.writeFile('torchat/dist/currentSession.txt', '', {
+      flag: 'w'
+    }, function(err) {
+      if (err) throw err;
+      console.log("It's saved!");
+    });
+
+    fs.writeFile('torchat/dist/buddy-chatProperties.txt', '', {
       flag: 'wx'
     }, function(err) {
       if (err) throw err;
@@ -119,12 +164,12 @@ function appeardiv3() {
   console.log(Date().toLocaleString() + ' Checking if me.info exists so we can go to the right place \n')
   if (fs.existsSync('me.info') == false) {
     fs.openSync('me.info', 'w');
-    window.location.href = 'welcome.html';
+    window.location.href = 'rights.html';
 
   } else {
     var checkIfEmpty = fs.readFileSync('me.info', 'utf8')
     if (checkIfEmpty == "") {
-      window.location.href = 'welcome.html';
+      window.location.href = 'rights.html';
     } else
       window.location.href = 'mainscreen.html';
   }

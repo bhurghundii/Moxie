@@ -91,7 +91,7 @@ def toUnicode(unknownstr):
 COPYRIGHT = u"Copyright (c) 2007-2011 Bernd Kreuß <prof7bit@googlemail.com>"
 
 DEAD_CONNECTION_TIMEOUT = 240
-KEEPALIVE_INTERVAL = 5
+KEEPALIVE_INTERVAL = 10
 MAX_UNANSWERED_PINGS = 4
 
 SCRIPT_DIR = os.path.abspath(os.path.dirname(toUnicode(sys.argv[0])))

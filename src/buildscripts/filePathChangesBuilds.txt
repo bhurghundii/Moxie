@@ -1,6 +1,0 @@
-LINUX[
-$torchat = resources/torchat/torchat.py
-$bfc = resources/bfc.py
-$initMoxie = resources/initMoxie.py
-$reset = resources/resetMoxie.py
-]

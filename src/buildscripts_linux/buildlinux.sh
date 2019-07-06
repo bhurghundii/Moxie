@@ -7,13 +7,12 @@ read -p 'Proceed? Type [y]: ' proceedVar
 if [ "$proceedVar" == 'y' ]; then
 
   echo "Resetting MOXIE. Reset Python script won't be built but will use JS version instead"
-  python resetMoxie.py
+  python hardMoxiereset.py
 
   echo "Packaging Node modules and MOXIE"
   npm run package-linux
 
   echo "Building Python"
-  pyinstaller bump.py
 
   sed -i 's/0/1/g' MoxieFlags.config
   cp MoxieFlags.config ../release-builds/Moxie-App-linux-x64/MoxieFlags.config

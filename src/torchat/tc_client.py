@@ -30,6 +30,9 @@ import tempfile
 import hashlib
 import config
 import version
+import json
+import ast
+from collections import OrderedDict
 
 TORCHAT_PORT = 11009 #do NOT change this.
 TOR_CONFIG = "tor" #the name of the active section in the .ini file
@@ -57,6 +60,11 @@ tor_timer = None
 f = open('torchatready.txt',"w")
 f.write('Not Ready')
 f.close()
+
+def writeToLog(log_message):
+    file = open('MoxieTorLog.txt', "a")
+    file.write(log_message)
+    file.close()
 
 def splitLine(text):
     """split a line of text on the first space character and return
@@ -280,42 +288,6 @@ class Buddy(object):
         self.last_status_time = time.time()
         if status <> self.status:
             self.status = status
-            self.bl.gui(CB_TYPE_STATUS, self)
-
-    def addFriend(address):
-        if len(address) != 16:
-            l = len(address)
-            print 'Address too short'
-            return
-
-        for c in address:
-            if c not in "234567abcdefghijklmnopqrstuvwxyz":
-                print 'Address can only have alphanumeric characters'
-                return
-
-        if self.buddy is None:
-            buddy = tc_client.Buddy(address,
-                          self.bl,
-                          self.txt_name.GetValue())
-            res = self.bl.addBuddy(buddy)
-            if res == False:
-                print 'Address already added'
-            else:
-                if self.txt_intro.GetValue() <> "":
-                    buddy.storeOfflineChatMessage(self.txt_intro.GetValue())
-        else:
-            address_old = self.buddy.address
-            offline_file_name_old = self.buddy.getOfflineFileName()
-            self.buddy.address = address
-            offline_file_name_new = self.buddy.getOfflineFileName()
-            self.buddy.name = self.txt_name.GetValue()
-            self.bl.save()
-            if address != address_old:
-                self.buddy.disconnect()
-                try:
-                    os.rename(offline_file_name_old, offline_file_name_new)
-                except:
-                    pass
 
     def onProfileName(self, name):
         print "(2) %s.onProfile" % self.address
@@ -323,12 +295,10 @@ class Buddy(object):
         if self.name == "" and name <> "":
             self.name = name
             self.bl.save()
-        self.bl.gui(CB_TYPE_PROFILE, self)
 
     def onProfileText(self, text):
         print "(2) %s.onProfile" % self.address
         self.profile_text = text
-        self.bl.gui(CB_TYPE_PROFILE, self)
 
     def onAvatarDataAlpha(self, data):
         print "(2) %s.onAvatarDataAplha()" % self.address
@@ -340,10 +310,9 @@ class Buddy(object):
         print "(2) %s.onAvatarData()" % self.address
         if data <> self.profile_avatar_data:
             self.profile_avatar_data = data
-            self.bl.gui(CB_TYPE_AVATAR, self)
 
     def onChatMessage(self, message):
-        self.bl.gui(CB_TYPE_CHAT, (self, message))
+        pass
 
     def sendChatMessage(self, text):
         #text must be unicode, will be encoded to UTF-8
@@ -353,30 +322,121 @@ class Buddy(object):
         else:
             self.storeOfflineChatMessage(text)
 
-    def readSendBuffer(self):
+    def mainMessageFunction(self):
+        #EXAMPLE {"sender":"Me","reciever":"oamdv7xq7k5stmg2","textValue":"aag","textType":"SimpleMessage"}
+
+        #message {"sender":"Me","reciever":"c2w5qyr77ivhhiar","textValue":"!PINGBACKPROTOCOL!","textType":"AddFriend"}
+        buddyPropHash = BuddyHashProperties()
+        buddyPropHash.updateHashBuddies()
+        #Reading the send buffer which basically is the message bridge between Torchat and Moxie
+        print 'Looping over the mainMessageFunction'
+        writeToLog('Looping over the mainMessageFunction')
+        file = open('AddBuffer.txt', "a")
+        file.close()
+
         file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "r")
         buffer = file.read()
         bufferline = len(buffer.split('\n'))
-        sansText = ""
+        #Clearing out the sendbuffer
+        file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "w")
+        file.write("")
+        file.close()
+
+        #Read Send Buffer and decide what to do with the message.
         i = 0
-        while (i < bufferline):
-            textToSend = buffer.split('\n')[i]
-            if textToSend.split(':')[0] == self.address:
-                if self.isFullyConnected():
-                    message = ProtocolMsg_message(self, textToSend.split(':')[1].encode("UTF-8"))
-                    message.send()
-                    youmessage = textToSend.split(':')[1]
-                    if (youmessage.split('#')[0] != "status"):
-                        file = open(self.address + '.txt', "a")
-                        file.write("You:" + textToSend.split(':')[1] + "\r\n")
+        while (i < bufferline and buffer):
+            if self.isFullyConnected():
+                #break json line
+                try:
+                    #Break each line
+                    s = buffer.split('\n')[i]
+                    d = json.loads(s)
+                    #Check if it's a request to add a friend
+                    #TODO: BUILD HASH MAP FOR COUNTER MESSAGES
+                    if d['textType'] == 'AddFriend':
+                        file = open('AddBuffer.txt', "a")
+                        file.write(d['reciever'] + ' ' + d['recieverName'] + '\n')
+
+                        file = open('buddy-list.txt', "a")
+                        file.write(d['reciever'] + ' ' + d['recieverName'] + '\n')
+
+                    if d['textType'] == 'SimpleMessage':
+                        #Write to your own copy first
+                        file = open(d['reciever'] + '.txt', "a")
+                        file.write('You:' + d['textValue'] + '\r\n')
+                        #Log it onto the offline so it will send to the sender
+                        file = open(d['reciever'] + '_offline.txt', "a")
+                        file.write(s + '\r\n')
+                        file.close()
+
+                    if d['textType'] == 'Status':
+                        #Put it on the offline of EVERYONES
+                        filename = os.path.join(config.getDataDir(), "buddy-list.txt")
+
+                        #create empty buddy list file if it does not already exist
+                        f = open(filename, "a")
+                        f.close()
+
+                        f = open(filename, "r")
+                        l = f.read().replace("\r", "\n").replace("\n\n", "\n").split("\n")
+                        f.close
+                        for line in l:
+                            line = line.rstrip().decode("UTF-8")
+                            if len(line) > 15:
+                                address = line[0:16]
+                                if len(line) > 17:
+                                    name = line[17:]
+                                else:
+                                    name = u""
+                                file = open(address + '_offline.txt', "a")
+                                file.write(s + '\r\n')
+
+                except:
+                    print 'Nothing to decode here...'
             else:
                 sansText += textToSend
             i = i + 1
 
-        #DELETE LINE FROM BUFFER
-        file = open(os.path.join(os.pardir, 'sendBuffer.txt'), "w")
-        file.write(sansText + "\r\n")
-        file.close()
+        self.sendPingsToNewFriends()
+        self.sendOfflineMessages2()
+
+
+    def sendPingsToNewFriends(self):
+        file = open('AddBuffer.txt', "r")
+        buffer = file.read()
+
+        bufferline = buffer.split('\n')
+        i = 0
+
+        while (i < len(bufferline) and buffer):
+            if self.isFullyConnected():
+                self.list = []
+                line = bufferline[i]
+                if len(line) > 15:
+                    address = line[0:16]
+                    if len(line) > 17:
+                        name = line[17:]
+                    else:
+                        name = u""
+                print 'Adding: ' + address + ' with ' + name
+                buddy = Buddy(address, self.bl, name)
+                self.bl.addBuddy(buddy)
+                #buddy.sendPing()
+                #file = open(address + '_offline.txt', "a")
+                #{"sender":"Me","reciever":"oamdv7xq7k5stmg2","textValue":"aag","textType":"SimpleMessage"}
+
+                #getID = open(os.path.join(os.pardir, 'me.info'), "r")
+                #you = (getID.read()).split(' ')[1]
+
+                #file.write('{"sender":"' + you + '","reciever":"' + address + '","textValue":"PINGBACKPROTOCOL","textType":"PINGBACKPROTOCOL"}' + '\r\n')
+                #file.close()
+
+            i = i + 1
+
+        file = open('AddBuffer.txt', "w")
+        file.write('')
+
+
 
     def getOfflineFileName(self):
         return os.path.join(config.getDataDir(),self.address + "_offline.txt")
@@ -405,16 +465,32 @@ class Buddy(object):
         if text:
             if self.isFullyConnected():
                 wipeFile(self.getOfflineFileName())
-                print "(2) sending offline messages to %s" % self.address
+                print " sending offline messages to %s" % self.address
                 #we send it without checking online status. because we have sent
                 #a pong before, the receiver will have set the status to online.
                 #text is unicode, so we must encode it to UTF-8 again.
                 message = ProtocolMsg_message(self, text.encode("UTF-8"))
                 message.send()
-                self.bl.gui(CB_TYPE_OFFLINE_SENT, self)
             else:
                 print "(2) could not send offline messages, not fully connected."
                 pass
+
+    def sendOfflineMessages2(self):
+        #this will be called in the incoming status message
+        #FIXME: call this from onStatus() instead, this would be the ntural place for it
+        text = self.getOfflineMessages()
+        print text
+        if text:
+            if self.isFullyConnected():
+                wipeFile(self.getOfflineFileName())
+                for i in range(len(text.split('\n'))):
+                    sending = text.split('\n')[i]
+                    print " sending offline messages to %s" % self.address
+                    #we send it without checking online status. because we have sent
+                    #a pong before, the receiver will have set the status to online.
+                    #text is unicode, so we must encode it to UTF-8 again.
+                    message = ProtocolMsg_message(self, sending.encode("UTF-8"))
+                    message.send()
 
     def getDisplayNameOrAddress(self):
         if self.name == "":
@@ -488,6 +564,7 @@ class Buddy(object):
             if self.conn_in:
                 self.sendStatus()
             else:
+
                 # still waiting for return connection
                 if self.count_unanswered_pings < config.MAX_UNANSWERED_PINGS:
                     self.sendPing()
@@ -496,6 +573,8 @@ class Buddy(object):
                     # maybe this will help
                     print "(2) too many unanswered pings to %s on same connection" % self.address
                     self.disconnect()
+
+
 
     def sendPing(self):
         print "(2) PING >>> %s" % self.address
@@ -506,17 +585,14 @@ class Buddy(object):
 
     def sendStatus(self):
         if self.isAlreadyPonged():
+            f = open('torchatready.txt',"w")
+            f.write('Ready')
+            f.close()
             status = ""
             if self.bl.own_status == STATUS_ONLINE:
                 status = "available"
-		f = open('torchatready.txt',"w")
-		f.write('Ready')
-		f.close()
             if self.bl.own_status == STATUS_AWAY:
                 status = "away"
-		f = open('torchatready.txt',"w")
-		f.write('Not Ready')
-		f.close()
             if self.bl.own_status == STATUS_XA:
                 status = "xa"
             if status != "":
@@ -525,6 +601,9 @@ class Buddy(object):
                 msg.send()
         else:
             print "(2) %s.sendStatus(): not connected, not sending" % self.address
+            f = open('torchatready.txt',"w")
+            f.write('Not Ready')
+            f.close()
 
     def sendProfile(self):
         if self.isAlreadyPonged():
@@ -594,6 +673,72 @@ class Buddy(object):
             line = self.address
         return line
 
+#This is designed to save how many chats are made and potentially any other info for security reasons
+#Locally stored ofc
+class BuddyHashProperties:
+    def __init__(self):
+        if (self.is_non_zero_file('buddy-chatProperties.txt') == False):
+            self.initPropertiesHash()
+
+    def is_non_zero_file(self, fpath):
+        return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
+
+    def initPropertiesHash(self):
+        data = dict()
+        file = open('buddy-list.txt', "r")
+        buffer = file.read()
+        #d['mynewkey'] = 'mynewvalue'
+        for i in range(0, len(buffer.split('\n')) - 1):
+            data[buffer.split('\n')[i].split(' ')[0]] = 0
+        file = open('buddy-chatProperties.txt', "w")
+        file.write(str(data))
+
+    def updateHashBuddies(self):
+        newdata = dict()
+        file = open('buddy-list.txt', "r")
+        buffer = file.read()
+        b_len = 0
+        for i in range(0, len(buffer.split('\n')) - 1):
+            newdata[buffer.split('\n')[i].split(' ')[0]] = 0
+            b_len = i
+
+
+        olddata = self.getHash()
+
+        for key in newdata:
+            print key
+            if key in olddata:
+                pass
+            else:
+                olddata[key] = 0
+
+        file = open('buddy-chatProperties.txt', "w")
+        file.write(str(olddata))
+
+    def incHash(self, id):
+        print 'Incrementing ' + id
+        data = dict()
+        file = open('buddy-chatProperties.txt', "r")
+        data = ast.literal_eval(file.read())
+        data[id] = data[id] + 1
+        file = open('buddy-chatProperties.txt', "w")
+        file.write(str(data))
+
+    def getHash(self):
+        data = dict()
+        file = open('buddy-chatProperties.txt', "r")
+        data = ast.literal_eval(file.read())
+        return data
+
+    def getHashID(self, id):
+        try:
+            data = dict()
+            file = open('buddy-chatProperties.txt', "r")
+            data = ast.literal_eval(file.read())
+            return data[id]
+        except:
+            return -1
+
 
 class BuddyList(object):
     """the BuddyList object is the central API of the client.
@@ -607,9 +752,8 @@ class BuddyList(object):
     The GUI will instantiate a BuddyList object and this is all
     it needs to do in order to start the client and access
     all functionality"""
-    def __init__(self, callback, socket=None):
+    def __init__(self, socket=None):
         print "(1) initializing buddy list"
-        self.gui = callback
 
         startPortableTor()
 
@@ -679,9 +823,6 @@ class BuddyList(object):
         f.close()
         print "(2) buddy list saved"
 
-        # this is the optimal spot to notify the GUI to redraw the list
-        self.gui(CB_TYPE_LIST_CHANGED, None)
-
     def logMyselfMessage(self, msg):
         self.own_buddy.onChatMessage("*** %s" % msg)
 
@@ -700,7 +841,6 @@ class BuddyList(object):
 
     def removeBuddy(self, buddy_to_remove, disconnect=True):
         print "(2) removeBuddy(%s, %s)" % (buddy_to_remove.address, disconnect)
-        self.gui(CB_TYPE_REMOVE, buddy_to_remove)
         buddy_to_remove.setActive(False)
 
         if not disconnect:
@@ -919,7 +1059,6 @@ class FileSender(threading.Thread):
             self.file_handle = open(self.file_name, mode="rb")
             self.file_handle.seek(0, 2) #SEEK_END
             self.file_size = self.file_handle.tell()
-            self.gui(self.file_size, 0)
             filename_utf8 = self.file_name_short.encode("utf-8")
 
             if not self.buddy.isFullyConnected():
@@ -1035,7 +1174,6 @@ class FileReceiver(object):
         #the following will result in a call into the GUI
         #the GUI will then give us a callback function
         print "(2) FileReceiver: notifying GUI about new file transfer"
-        self.buddy.bl.gui(CB_TYPE_FILE, self)
 
         #we cannot receive without a GUI (or other piece of code
         #that provides the callback) because this other code
@@ -1513,7 +1651,6 @@ class ProtocolMsg_version(ProtocolMsg):
             print "(2) %s has version %s" % (self.buddy.address, self.version)
             self.buddy.version = self.version
 
-
 class ProtocolMsg_status(ProtocolMsg):
     """transmit the status, this MUST be sent every 120 seconds
     or the client may trigger a timeout and close the conection.
@@ -1543,7 +1680,8 @@ class ProtocolMsg_status(ProtocolMsg):
             if self.status == "xa":
                 self.buddy.onStatus(STATUS_XA)
 
-            self.buddy.readSendBuffer()
+            #This function handles all the message sending
+            self.buddy.mainMessageFunction()
 
             #avoid timeout of in-connection
             self.connection.last_active = time.time()
@@ -1660,19 +1798,9 @@ class ProtocolMsg_message(ProtocolMsg):
         #to open a chat window and/or display the text.
         if self.buddy:
             if self.buddy in self.bl.list:
-
-                print self.buddy.address + " " + self.text
                 message = self.text
 
-                file = open(self.buddy.address + '.txt', "a")
-                file.write("")
-
-                if (message.split('#')[0] != "status"):
-                    file = open(self.buddy.address + '.txt', "a")
-                    file.write(self.buddy.address + ":" + self.text + "\r\n")
-                else:
-                    file = open('statusUpdates.txt', "a")
-                    file.write(self.buddy.name + "" + self.text[6:] +"\r\n")
+                self.buddy.sendChatMessage(self.text)
 
             else:
                 print "(1) ***** protocol violation reply to %s" % self.buddy.address
@@ -1888,7 +2016,59 @@ class Receiver(threading.Thread):
                     readbuffer = temp.pop()
 
                     for line in temp:
+
                         if self.running:
+                            print 'RECIEVED: ' + line
+                            dar = line
+                            try:
+                                if dar.split(' ')[0] == 'ping':
+                                    pingfrom = dar.split(' ')[1]
+                                    print pingfrom
+                                    addbuffer = open('AddBuffer.txt', "r")
+                                    l = addbuffer.read().split('\n')
+                                    toRemove = []
+                                    for text in l:
+                                        if pingfrom not in text and text != '':
+                                            toRemove.append(text)
+
+                                    addbuffer = open('AddBuffer.txt', "w")
+                                    for x in toRemove:
+                                        addbuffer.write(x + "\n")
+                            except Exception as e:
+                                print e
+
+                            try:
+                            #    message {"sender":"Me","reciever":"g5mlo4lohqjpm5tf","textValue":"my stupid child","textType":"Status"}
+                                print line.split('message ')[1]
+                                d = json.loads(line.split('message ')[1])
+                                print d['textType']
+                                print d['textValue']
+
+                                if (d['textType'] == 'SimpleMessage'):
+
+                                    currentsession = tuple(open(d['sender'] + '.txt', 'r'))
+                                    print currentsession
+                                    if (d['sender'] + ':' + d['textValue']) not in currentsession:
+                                        file = open(d['sender'] + '.txt', "a")
+                                        file.write(d['sender'] + ':' + d['textValue'] + "\r\n")
+
+                                if (d['textType'] == 'Status'):
+                                    currentsession = tuple(open('statusUpdates.txt', 'r'))
+                                    print currentsession
+                                    if (d['sender'] + ':' + d['textValue']) not in currentsession:
+                                        file = open('statusUpdates.txt', "a")
+                                        file.write(d['sender'] + '#' + d['textValue'] + "\r\n")
+
+                                #On recieving an Add Friend
+                                if (d['textType'] == 'AddFriend'):
+                                    file = open('buddy-list.txt', "a")
+                                    file.write("\r\n" + d['sender'] + " " + d['textValue'])
+                                #   file = open(d['sender'] + '_offline.txt', "a")
+                                #   file.write('{"sender":"' + d['reciever'] + ' ","reciever":"' + d['sender'] + '","textValue":"!PINGBACKPROTOCOL!","textType":"ReturnFriend"}')
+
+                            except:
+                                print '(2) There is nothing to decode, could be a ping'
+
                             try:
                                 # on outgoing connections we do not allow any
                                 # incoming messages other than file*
@@ -1988,16 +2168,50 @@ class OutConnection(threading.Thread):
             print "(2) connected to %s" % self.address
             self.bl.onConnected(self)
             self.receiver = Receiver(self, False) # this Receiver will only accept file* messages
+            self.send_buffer = list(OrderedDict.fromkeys(self.send_buffer))
             while self.running:
                 while len(self.send_buffer) > 0:
                     text = self.send_buffer.pop(0)
+
+                    #BEFORE WE SEND, WE CHECK WHETHER THE ID HAS ENDED AND WE SHOULD SEND IT!
+
                     try:
-                        print "(2) %s out-connection sending buffer" % self.address
-                        self.socket.send(text)
-                    except:
-                        print "(2) out-connection send error"
-                        self.bl.onErrorOut(self)
-                        self.close()
+                        d = json.loads(text.split('message ')[1])
+                        print 'SENDING: ' + text + ' to ' + self.address
+
+                        if (d['textType'] == 'SimpleMessage' or d['textType'] == 'Status'):
+                            currentsession = tuple(open('currentSession.txt', 'r'))
+                            if text not in currentsession:
+                                try:
+                                    print 'Comparision done, sending'
+                                    print "(2) %s out-connection sending buffer" % self.address
+                                    self.socket.send(text)
+                                    file = open('currentSession.txt', "a")
+                                    file.write(text)
+                                except:
+                                    print "(2) out-connection send error"
+                                    self.bl.onErrorOut(self)
+                                    self.close()
+
+                    except Exception as e:
+                        print e
+                        try:
+                            #If its a message that just wont send, ignore it
+                            d = json.loads(text.split('message ')[1])
+                        except:
+                            try:
+
+                                if ('{' not in text) and ('}' not in text) and ('textValue' not in text):
+                                    print 'Sending: ' + text
+                                    print "(2) %s out-connection sending buffer" % self.address
+                                    self.socket.send(text)
+                            except:
+                                print "(2) out-connection send error"
+                                self.bl.onErrorOut(self)
+                                self.close()
+
+                        print 'Done sending'
+
 
                 time.sleep(0.2)
 

@@ -1,0 +1,33 @@
+c+=========================+
+| HOW JSON IN MOXIE WORKS |
++=========================+
+
+The purpose of this file is to remind developers how the JSON for MOXIE works.
+
+PYTHON
+----------
+import json
+
+#Example JSON
+#{"sender":"Me","reciever":"oamdv7xq7k5stmg2","textValue":"aag","textType":"SimpleMessage"}
+
+s = 'JSON STRING HERE'
+d = json.loads(s)
+
+print -->
+	 d['Sender'] for sender
+	 d['reciever'] for who its sending to (receiver)
+	 d['textValue'] for the actual message value (payload)
+	 d['textType'] for the type of message
+	 d['chatID'] for the chatID 
+
++===========+
+| textType  |
++===========+
+
+SimpleMessage -- This is what is sent as a part of the normal text protocol.
+Status -- This is a status message sent to everyone
+AddFriend -- This is just going to ping them to initiate adding friends
+ReturnFriend -- Return the ping back, with the ID to 100% confirm it's been sent
+ID -- This message holds details like name, and welcome message. 
+
