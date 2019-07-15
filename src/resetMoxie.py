@@ -1,36 +1,74 @@
-import os
-import shutil
+#
+# https://github.com/BurgundyIsAPublicEnemy/Moxie
+# Created for Python 3.7.2
+#
+# Reset TorCHAT and Moxie
+#
 
-#Reset TorCHAT and Moxie
 
-print 'Soft reset because we do not wanna have to come with a new tree structure again'
-print 'Cleaning MOXIE'
-if os.path.isfile("me.info"):
-    os.remove("me.info")
-if os.path.isfile("sendBuffer.txt"):
-    os.remove("sendBuffer.txt")
+from os import remove
 
-if os.path.isfile("moxielogout.txt"):
-    os.remove("moxielogout.txt")
+def _file_op(op, file_paths):
+	# For each file path
+	for file_path in file_paths:
+		status = None
+		error = None
+		# If the file path is a string
+		if isinstance(file_path, str):
+			# Remove
+			if op == 'remove':
+				try:
+					remove(file_path)
+					status = 'removed'
+				except FileNotFoundError:
+					error = 'file not found'
+			# Create
+			if op == 'create':
+				open(file_path, 'a').close()
+				status = 'created'
+		else:
+			error = 'file path is not a string'
+		
+		print(str.format(
+			'[{:s}] {:40s} {:s}',
+			# Status
+			str({
+				None      : 'x',
+				'removed' : '-',
+				'created' : '+'
+			}.get(status)),
+			# File Name
+			str(file_path),
+			# Error
+			'' if error is None else '(' + str(error) + ')'
+		))
+			
 
-print 'Cleaning BUMP'
-if os.path.isfile("historyaddresses.txt"):
-    os.remove("historyaddresses.txt")
-    open("historyaddresses.txt", 'a').close()
+def create_files(*file_paths):
+	_file_op('create', file_paths)
 
-print 'Cleaning TorChat'
-if os.path.isfile("torchat/torchat.ini"):
-    os.remove("torchat/torchat.ini")
+def remove_files(*file_paths):
+	_file_op('remove', file_paths)
+			
 
-if os.path.isfile("torchat/buddy-list.txt"):
-    os.remove("torchat/buddy-list.txt")
+print("""
+Soft reset because we do not wanna have to come with a new tree structure again
+Cleaning MOXIE'
+""")
 
-if os.path.isfile("torchat/Tor/tor.pid"):
-    os.remove("torchat/Tor/tor.pid")
+remove_files(
+	"historyaddresses.txt",
+	"me.info",
+	"moxielogout.txt",
+	"sendBuffer.txt",
+	"torchat/torchat.ini",
+	"torchat/buddy-list.txt",
+	"torchat/Tor/tor.pid",
+	"torchat/pid-torchat.txt",
+	"torchat/statusUpdates.txt"
+)
 
-if os.path.isfile("torchat/pid-torchat.txt"):
-    os.remove("torchat/pid-torchat.txt")
-
-if os.path.isfile("torchat/statusUpdates.txt"):
-    os.remove("torchat/statusUpdates.txt")
-    open("torchat/statusUpdates.txt", 'a').close()
+create_files(
+	"historyaddresses.txt",
+	"torchat/statusUpdates.txt"
+)
