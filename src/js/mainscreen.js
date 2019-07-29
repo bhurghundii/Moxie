@@ -35,6 +35,16 @@ function getID() {
   return data.toString().split(' ')[1]
 }
 
+function startBumpProtocol(){
+  if (isReleaseBuild() == 0) {
+    const ps = require('python-shell')
+    ps.PythonShell.run('bump.py', null, function(message) {
+      console.log(message);
+    });
+    console.log(Date().toLocaleString() + ' BUMP successfully started \n')
+  }
+}
+
 function getName() {
   file = "me.info";
   var fs = require('fs');
@@ -128,6 +138,13 @@ if (isReleaseBuild() == 0) {
     document.getElementById("ContentID").innerHTML = "";
     StatusUpdate();
   })
+
+  /*
+  watch('output.txt', function(event, filename) {
+    document.getElementById("bumpFeedback").innerHTML = "";
+    MoxieFeedBackUpdate();
+  })
+  */
 
 }
 if (isReleaseBuild() == 1) {
@@ -271,6 +288,18 @@ function getUTCTime(d) {
     .replace('PM', 'p.m.')
     .replace('AM', 'a.m.');
   return dateString
+}
+function MoxieFeedBackUpdate() {
+  if (isReleaseBuild() == 0) {
+    var data = fs.readFileSync('output.txt', 'utf8')
+    if (data != '') {
+      data = deleteDuplicatesFromArray(data.split('\n'))
+      for (var i = 0; i < data.length - 1; i++) {
+        var content = document.getElementById("bumpFeedback")
+        content.innerHTML += "<div> <p style='font-weight: bold;'>" + data[i] + "</p></div>"
+      }
+    }
+  }
 }
 
 function StatusUpdate() {

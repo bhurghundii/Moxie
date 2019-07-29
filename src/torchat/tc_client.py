@@ -32,6 +32,9 @@ import config
 import version
 import json
 import ast
+import cleanup
+
+
 from collections import OrderedDict
 
 TORCHAT_PORT = 11009 #do NOT change this.
@@ -1679,6 +1682,13 @@ class ProtocolMsg_status(ProtocolMsg):
                 self.buddy.onStatus(STATUS_AWAY)
             if self.status == "xa":
                 self.buddy.onStatus(STATUS_XA)
+
+            #this checks whether we should be killing everything and wrapping up
+            file = open('closesignal.txt', 'r')
+            close = file.read();
+            print close.strip()
+            if (close.strip() == 'END'):
+                cleanup.cleanup()
 
             #This function handles all the message sending
             self.buddy.mainMessageFunction()

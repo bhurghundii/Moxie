@@ -35,7 +35,7 @@ a{
     position: absolute;
     width: 90px;
     height: 50px;
-    top: 20%;
+    top: 10%;
     left: 0px;
     color: #fff;
     line-height: 50px;
@@ -61,7 +61,7 @@ a{
 }
 .name{
     position: absolute;
-    top: 3px;
+    top: 30%;
     left: 110px;
     font-family: 'Lato';
     font-size: 25px;

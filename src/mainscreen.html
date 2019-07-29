@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="css/mainscreen.css">
 <script src="js/utilities.js" type="text/javascript"> </script>
+<script src="js/cleanup.js" type="text/javascript"> </script>
+
 
 <body>
   <div class="w3-sidebar w3-bar-block w3-black w3-card" style="display:none; width:20%;  height: 100%; left: -1%;" id="leftMenu">
@@ -32,8 +34,15 @@
           <p id="error" style="visibility:hidden;"> Looks like you're missing some details </p>
         </div>
         <br></br>
-          <div id="name"> </div>
+        <div id="name"> </div>
       </div>
+    </div>
+
+    <!-- <div class="bumpAddFriends">
+      <button onclick="startBumpProtocol()"class="BumpButton">Bump Me!</button>
+
+      <div id="bumpFeedback">
+      </div> -->
     </div>
   </div>
 
@@ -41,26 +50,26 @@
 
   </div>
 
-  <div class ='UIButton'>
-  <button onclick='toggleVisibility("Toolkit")' class="round-button-circle">
-    <div class="icon"> ◤◥ </div>
-  </button>
-  <div class="Toolkit" id="Toolkit">
-    <button class="tool-button-circle"> </button>
-    <button class="toolicon-button-circle" onclick="toggleLeftMenu()"> <i class="fa fa-users"> </i> </button>
-    <button class="toolicon1-button-circle" onclick="window.location.href = 'settings.html'"> <i class="fa fa-cog"></i> </button>
-    <button class="toolicon2-button-circle" onclick='toggleVisibility("StatusText")'> <i class="fa fa-comment-o"></i> </button>
-    <button class="toolicon3-button-circle" onclick="toggleRightMenu()"> <i class="fa fa-plus"></i> </button>
+  <div class='UIButton'>
+    <button onclick='toggleVisibility("Toolkit")' class="round-button-circle">
+      <div class="icon"> ◤◥ </div>
+    </button>
+    <div class="Toolkit" id="Toolkit">
+      <button class="tool-button-circle"> </button>
+      <button class="toolicon-button-circle" onclick="toggleLeftMenu()"> <i class="fa fa-users"> </i> </button>
+      <button class="toolicon1-button-circle" onclick="window.location.href = 'settings.html'"> <i class="fa fa-cog"></i> </button>
+      <button class="toolicon2-button-circle" onclick='toggleVisibility("StatusText")'> <i class="fa fa-comment-o"></i> </button>
+      <button class="toolicon3-button-circle" onclick="toggleRightMenu()"> <i class="fa fa-plus"></i> </button>
 
-  </div>
+    </div>
 
-  <div class='status' id="StatusText">
-    <input class="textarea" id="statusSent" type="text" placeholder="Got something to share? Tell everyone!" />
-    <div class="postStatusButton">
-      <button class="post0-postStatusButton-circle" onclick="sendStatusUpdate()"> + </button>
+    <div class='status' id="StatusText">
+      <input class="textarea" id="statusSent" type="text" placeholder="Got something to share? Tell everyone!" />
+      <div class="postStatusButton">
+        <button class="post0-postStatusButton-circle" onclick="sendStatusUpdate()"> + </button>
+      </div>
     </div>
   </div>
-</div>
   <script src="js/mainscreen.js" type="text/javascript"> </script>
   </div>
   </div>

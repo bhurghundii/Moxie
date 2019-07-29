@@ -1,0 +1,10 @@
+{"sender":"uqh5kbizjgktpjdf","reciever":"uqh5kbizjgktpjdf","textValue":"1562402638.753-Can you feel my love buzz","textType":"SimpleMessage","chatID":1}
+{"sender":"uqh5kbizjgktpjdf","reciever":"n5rgbqpzgsuawdsr","textValue":"1562402822.333-Hello! ","textType":"SimpleMessage","chatID":1}
+{"sender":"uqh5kbizjgktpjdf","reciever":"n5rgbqpzgsuawdsr","textValue":"1562402829.632-This is a test from home","textType":"SimpleMessage","chatID":1}
+{"sender":"uqh5kbizjgktpjdf","reciever":"n5rgbqpzgsuawdsr","textValue":"1562405442.752-Hello there!","textType":"SimpleMessage","chatID":1}
+{"sender":"uqh5kbizjgktpjdf","reciever":"n5rgbqpzgsuawdsr","textValue":"1562405457.766-This is a test from Costa Coffee","textType":"SimpleMessage","chatID":1}
+{"sender":"uqh5kbizjgktpjdf","reciever":"n5rgbqpzgsuawdsr","textValue":"1562405750.09-I will be coming back in half an hour","textType":"SimpleMessage","chatID":1}
+{"sender":"uqh5kbizjgktpjdf","reciever":"dpkunkwed2mv2njm","textValue":"1562497735.094-Hello, this is a test","textType":"SimpleMessage","chatID":1}
+{"sender":"uqh5kbizjgktpjdf","reciever":"dpkunkwed2mv2njm","textValue":"1562498017.188-Get in the robot, Shinji","textType":"SimpleMessage","chatID":1}
+{"sender":"uqh5kbizjgktpjdf","reciever":"thfy65j5rqrrzlms","textValue":"1562501924.087-Hey Tim!","textType":"SimpleMessage","chatID":1}
+{"sender":"uqh5kbizjgktpjdf","reciever":"thfy65j5rqrrzlms","textValue":"1562502104.566-Hello boy","textType":"SimpleMessage","chatID":1}

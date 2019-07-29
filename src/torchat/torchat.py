@@ -27,10 +27,6 @@ def main():
     file.write('Ready')
     file.close()
 
-    file = open("pid-torchat.txt", "w")
-    file.write('python|' + str(os.getpid()) )
-    file.close()
-
     #test for availability of our listening port
     interface = config.get("client", "listen_interface")
     port = config.getint("client", "listen_port")

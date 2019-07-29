@@ -31,7 +31,31 @@
   left: 96%
 }
 
+.bumpAddFriends {
+  position: relative;
+}
 
+.BumpButton {
+	background-color:#ffffff;
+	display:inline-block;
+	cursor:pointer;
+	color:#000000;
+	font-family:Arial;
+	font-size:12px;
+	padding:16px 31px;
+	text-decoration:none;
+  position: relative;
+  left: 12.5%;
+}
+
+.BumpButton:hover {
+	background-color:#000000;
+}
+
+.BumpButton:active {
+	position:relative;
+	top:1px;
+}
 
 
 
