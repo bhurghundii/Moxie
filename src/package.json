@@ -18,7 +18,7 @@
   "author": "BLACK MAGIC PROJECT",
   "license": "SEE LICENSE IN README.MD",
   "dependencies": {
-    "electron": "^18.3.7",
+    "electron": "^23.2.1",
     "node-watch": "^0.6.2",
     "python-shell": "^1.0.7"
   },
